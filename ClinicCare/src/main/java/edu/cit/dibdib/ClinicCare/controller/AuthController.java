@@ -22,4 +22,23 @@ public class AuthController {
         User savedUser = userRepository.save(user);
         return ResponseEntity.ok("User registered successfully!");
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody User loginRequest) {
+        System.out.println("Login attempt for email: " + loginRequest.getEmail());
+        return userRepository.findByEmail(loginRequest.getEmail())
+                .map(user -> {
+                    if (user.getPassword().equals(loginRequest.getPassword())) {
+                        System.out.println("Login success for: " + loginRequest.getEmail());
+                        return ResponseEntity.ok("Login successful!");
+                    } else {
+                        System.out.println("Login failed: Invalid password for " + loginRequest.getEmail());
+                        return ResponseEntity.status(401).body("Error: Invalid password!");
+                    }
+                })
+                .orElseGet(() -> {
+                    System.out.println("Login failed: User not found with email " + loginRequest.getEmail());
+                    return ResponseEntity.status(401).body("Error: User not found!");
+                });
+    }
 }

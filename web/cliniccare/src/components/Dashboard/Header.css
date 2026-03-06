@@ -1,0 +1,93 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 32px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    margin-bottom: 28px;
+}
+
+.header-welcome h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a3a5c;
+    margin: 0;
+}
+
+.header-name {
+    color: #3b82f6;
+}
+
+.header-subtitle {
+    margin: 4px 0 0;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.header-notification {
+    position: relative;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 12px;
+    padding: 10px;
+    cursor: pointer;
+    color: #475569;
+    transition: all 0.2s;
+    display: flex;
+}
+
+.header-notification:hover {
+    background: rgba(59, 130, 246, 0.1);
+    color: #1e40af;
+}
+
+.header-notification-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #ef4444;
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 16px 20px;
+        margin-left: 0;
+    }
+
+    .header-welcome h2 {
+        font-size: 1.15rem;
+    }
+}

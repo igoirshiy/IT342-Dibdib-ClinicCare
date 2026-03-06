@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Register.css';
 
-const Register = ({ onSwitchToLogin }) => {
+const Register = ({ onSwitchToLogin, onRegisterSuccess }) => {
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
@@ -52,8 +52,12 @@ const Register = ({ onSwitchToLogin }) => {
                 });
 
                 if (response.ok) {
-                    alert('Registration Successful!');
-                    onSwitchToLogin();
+                    if (onRegisterSuccess) {
+                        onRegisterSuccess();
+                    } else {
+                        alert('Registration Successful!');
+                        onSwitchToLogin();
+                    }
                 } else {
                     const errorText = await response.text();
                     alert('Registration Failed: ' + errorText);

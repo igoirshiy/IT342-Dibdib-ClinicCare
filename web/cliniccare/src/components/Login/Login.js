@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Login.css';
 
-const Login = ({ onSwitchToRegister }) => {
+const Login = ({ onSwitchToRegister, onLogin }) => {
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -28,12 +28,33 @@ const Login = ({ onSwitchToRegister }) => {
         return newErrors;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const validationErrors = validate();
         if (Object.keys(validationErrors).length === 0) {
-            console.log('Login Data:', formData);
-            alert('Login Successful! (Mock)');
+            try {
+                const response = await fetch('http://localhost:8080/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: formData.email,
+                        password: formData.password
+                    }),
+                });
+
+                if (response.ok) {
+                    alert('Login Successful!');
+                    if (onLogin) onLogin();
+                } else {
+                    const errorText = await response.text();
+                    alert('Login Failed: ' + errorText);
+                }
+            } catch (error) {
+                console.error('Error during login:', error);
+                alert('An error occurred. Please try again later.');
+            }
         } else {
             setErrors(validationErrors);
         }
