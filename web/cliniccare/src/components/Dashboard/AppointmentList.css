@@ -1,0 +1,147 @@
+.appointments-list-container {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+}
+
+.list-header {
+    margin-bottom: 20px;
+}
+
+.list-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1a3a5c;
+}
+
+.appointments-scroll-area {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+/* Custom Scrollbar for the list */
+.appointments-scroll-area::-webkit-scrollbar {
+    width: 6px;
+}
+
+.appointments-scroll-area::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.appointments-scroll-area::-webkit-scrollbar-thumb {
+    background: rgba(59, 130, 246, 0.3);
+    border-radius: 10px;
+}
+
+.appointment-item-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 20px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.2s ease;
+}
+
+.appointment-item-card:hover {
+    transform: scale(1.01);
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.doctor-name {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #1a3a5c;
+    margin-bottom: 4px;
+}
+
+.consultation-type {
+    font-size: 0.85rem;
+    color: #3b82f6;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.appointment-time {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-top: 6px;
+}
+
+.appointment-status-group {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.queue-tag {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4px 10px;
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 8px;
+    min-width: 50px;
+}
+
+.queue-label {
+    font-size: 0.65rem;
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.queue-val {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1e40af;
+}
+
+.status-badge-detailed {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+    min-width: 100px;
+}
+
+.status-waiting {
+    background: rgba(245, 158, 11, 0.15);
+    color: #b45309;
+}
+
+.status-serving {
+    background: rgba(59, 130, 246, 0.15);
+    color: #1e40af;
+}
+
+.status-completed {
+    background: rgba(34, 197, 94, 0.15);
+    color: #15803d;
+    opacity: 0.7;
+    /* Faded for completed */
+}
+
+@media (max-width: 640px) {
+    .appointment-item-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .appointment-status-group {
+        width: 100%;
+        justify-content: space-between;
+        padding-top: 12px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+}

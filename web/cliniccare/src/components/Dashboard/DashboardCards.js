@@ -2,7 +2,7 @@ import React from "react";
 import "./DashboardCards.css";
 import { Calendar, Clock, Users, CalendarPlus, CalendarCheck } from "lucide-react";
 
-const DashboardCards = () => {
+const DashboardCards = ({ onBookClick }) => {
     return (
         <div className="dashboard-cards">
             {/* Upcoming Appointment */}
@@ -61,7 +61,7 @@ const DashboardCards = () => {
                     <h3>Quick Actions</h3>
                 </div>
                 <div className="card-body card-body--actions">
-                    <button className="action-btn action-btn--primary">
+                    <button className="action-btn action-btn--primary" onClick={onBookClick}>
                         <CalendarPlus size={18} />
                         Book New Appointment
                     </button>
