@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { X, Calendar, User, ChevronDown } from 'lucide-react';
 import './BookingModal.css';
 
-const BookingModal = ({ isOpen, onClose }) => {
+const BookingModal = ({ isOpen, onClose, user }) => {
     const [formData, setFormData] = useState({
         type: '',
         date: '',
@@ -10,8 +10,75 @@ const BookingModal = ({ isOpen, onClose }) => {
         doctor: '',
         reason: ''
     });
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     if (!isOpen) return null;
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        console.log("Submitting booking...", formData);
+
+        if (!user) {
+            alert('Error: User session not found. Please log in again.');
+            return;
+        }
+
+        // Basic Validation
+        if (!formData.type || !formData.date || !formData.timeSlot || !formData.doctor) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            const payload = {
+                patientEmail: user.email,
+                patientName: user.fullName,
+                doctorName: formData.doctor,
+                consultationType: formData.type,
+                appointmentDate: formData.date,
+                timeSlot: formData.timeSlot,
+                reason: formData.reason,
+                status: 'Waiting'
+            };
+
+            console.log("Full Booking Payload:", payload);
+            console.log("Current User Object:", user);
+
+            if (!payload.patientEmail || !payload.patientName) {
+                console.error("CRITICAL: Missing user details!", { email: user.email, name: user.fullName });
+                alert("Error: User details missing. Try logging out and back in.");
+                setIsSubmitting(false);
+                return;
+            }
+
+            console.log("Sending request to backend...");
+            const response = await fetch('http://127.0.0.1:8080/api/appointments/book', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            console.log("Response status:", response.status);
+
+            if (response.ok) {
+                const data = await response.json();
+                alert(`Successfully booked! Your Queue Number is: ${data.queueNumber}`);
+                onClose();
+            } else {
+                const errorText = await response.text();
+                alert('Booking Failed (Backend Error): ' + errorText);
+            }
+        } catch (error) {
+            console.error('Error during booking:', error);
+            alert('Booking Failed (Network Error): ' + error.message);
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     const timeSlots = [
         { time: "07:30 – 08:00 AM", left: 2, full: false },
@@ -32,11 +99,20 @@ const BookingModal = ({ isOpen, onClose }) => {
         if (e.target.className === 'modal-overlay') onClose();
     };
 
-    // Get max date (+7 days from today)
-    const today = new Date().toISOString().split('T')[0];
+    // Get local date string YYYY-MM-DD
+    const getLocalDate = () => {
+        const d = new Date();
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+    const today = getLocalDate();
     const nextWeek = new Date();
     nextWeek.setDate(nextWeek.getDate() + 7);
-    const maxDate = nextWeek.toISOString().split('T')[0];
+    const maxDay = new Date(nextWeek);
+    const maxDate = `${maxDay.getFullYear()}-${String(maxDay.getMonth() + 1).padStart(2, '0')}-${String(maxDay.getDate()).padStart(2, '0')}`;
 
     return (
         <div className="modal-overlay" onClick={handleBackdropClick}>
@@ -51,7 +127,7 @@ const BookingModal = ({ isOpen, onClose }) => {
                     </button>
                 </header>
 
-                <form className="modal-form" onSubmit={(e) => e.preventDefault()}>
+                <form className="modal-form" onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label>Consultation Type</label>
                         <div className="select-wrapper">
@@ -129,11 +205,14 @@ const BookingModal = ({ isOpen, onClose }) => {
                     </div>
 
                     <footer className="modal-footer">
-                        <button type="button" className="btn-secondary" onClick={onClose}>Cancel</button>
-                        <button type="button" className="btn-primary" onClick={() => {
-                            alert('Appointment Confirmed! (Mock)');
-                            onClose();
-                        }}>Confirm Appointment</button>
+                        <button type="button" className="btn-secondary" onClick={onClose} disabled={isSubmitting}>Cancel</button>
+                        <button
+                            type="submit"
+                            className="btn-primary"
+                            disabled={isSubmitting}
+                        >
+                            {isSubmitting ? 'Processing...' : 'Confirm Appointment'}
+                        </button>
                     </footer>
                 </form>
             </div>

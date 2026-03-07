@@ -7,7 +7,7 @@ import StaffDashboard from "./StaffDashboard";
 import BookingModal from "./BookingModal";
 import "./Dashboard.css";
 
-const Dashboard = ({ onLogout, userRole }) => {
+const Dashboard = ({ onLogout, userRole, user }) => {
     const [activeKey, setActiveKey] = useState(userRole === 'STAFF' ? 'staff' : 'dashboard');
     const [isBookingOpen, setIsBookingOpen] = useState(false);
 
@@ -24,7 +24,7 @@ const Dashboard = ({ onLogout, userRole }) => {
                 <div className="dashboard-content">
                     {activeKey === "dashboard" && userRole !== 'STAFF' && (
                         <>
-                            <DashboardCards onBookClick={() => setIsBookingOpen(true)} />
+                            <DashboardCards onBookClick={() => setIsBookingOpen(true)} user={user} />
                             <NotificationCenter />
                         </>
                     )}
@@ -51,6 +51,7 @@ const Dashboard = ({ onLogout, userRole }) => {
             <BookingModal
                 isOpen={isBookingOpen}
                 onClose={() => setIsBookingOpen(false)}
+                user={user}
             />
         </div>
     );

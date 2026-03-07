@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = {"http://localhost:3000", "http://127.0.0.1:3000"})
 public class AuthController {
 
     @Autowired
@@ -20,13 +21,14 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
+        System.out.println("Registration attempt for email: " + user.getEmail());
         if (userRepository.findByEmail(user.getEmail()).isPresent() || 
             staffRepository.findByEmail(user.getEmail()).isPresent()) {
             return ResponseEntity.badRequest().body("Error: Email is already in use!");
         }
 
         User savedUser = userRepository.save(user);
-        return ResponseEntity.ok("User registered successfully!");
+        return ResponseEntity.ok(savedUser);
     }
 
     @PostMapping("/login")

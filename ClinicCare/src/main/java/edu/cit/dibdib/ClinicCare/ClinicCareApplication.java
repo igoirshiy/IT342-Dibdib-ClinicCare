@@ -55,6 +55,29 @@ public class ClinicCareApplication {
 				System.out.println("Error creating staff table: " + e.getMessage());
 			}
 
+			// Create appointments table if not exists
+			try {
+				System.out.println("Forcefully recreating appointments table for schema sync...");
+				// Temporarily dropping to ensure columns are clean during development
+				jdbcTemplate.execute("DROP TABLE IF EXISTS appointments CASCADE");
+				
+				jdbcTemplate.execute("CREATE TABLE appointments (" +
+						"id BIGSERIAL PRIMARY KEY, " +
+						"patient_email VARCHAR(255) NOT NULL, " +
+						"patient_name VARCHAR(255) NOT NULL, " +
+						"doctor_name VARCHAR(255) NOT NULL, " +
+						"consultation_type VARCHAR(255) NOT NULL, " +
+						"appointment_date DATE NOT NULL, " +
+						"time_slot VARCHAR(255) NOT NULL, " +
+						"reason TEXT, " +
+						"status VARCHAR(255) NOT NULL DEFAULT 'Waiting', " +
+						"queue_number VARCHAR(255)" +
+						")");
+				System.out.println("Appointments table recreated and ready.");
+			} catch (Exception e) {
+				System.out.println("Error syncing appointments table: " + e.getMessage());
+			}
+
 			System.out.println("Database setup complete!");
 		};
 	}

@@ -104,7 +104,38 @@
     letter-spacing: -0.02em;
 }
 
+.status-waiting {
+    background: rgba(202, 138, 4, 0.15);
+    color: #ca8a04;
+}
+
+.status-serving {
+    background: rgba(59, 130, 246, 0.15);
+    color: #3b82f6;
+}
+
+.status-completed {
+    background: rgba(22, 163, 74, 0.15);
+    color: #16a34a;
+}
+
+.no-data-text {
+    font-size: 0.9rem;
+    color: #64748b;
+    font-style: italic;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.queue-number--waiting {
+    color: #ca8a04;
+}
+
 .queue-number--serving {
+    color: #3b82f6;
+}
+
+.queue-number--completed {
     color: #16a34a;
 }
 

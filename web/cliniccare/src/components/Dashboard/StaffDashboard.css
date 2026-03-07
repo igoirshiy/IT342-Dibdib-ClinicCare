@@ -426,3 +426,14 @@
 .rotate-45 {
     transform: rotate(45deg);
 }
+
+.no-data {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    color: #64748b;
+    font-style: italic;
+    background: white;
+    border-radius: 12px;
+    border: 1px dashed #e2e8f0;
+}

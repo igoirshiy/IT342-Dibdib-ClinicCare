@@ -1,26 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Users,
     Clock,
     CheckCircle2,
     Calendar,
-    ChevronDown,
     Bell,
     Edit2,
     Slash
 } from "lucide-react";
-import { initialAppointments, initialDoctorSlots } from "./staffData";
+import { initialDoctorSlots } from "./staffData";
 import "./StaffDashboard.css";
 
 const StaffDashboard = () => {
-    const [appointments] = useState(initialAppointments);
+    const [appointments, setAppointments] = useState([]);
     const [slots] = useState(initialDoctorSlots);
 
+    const fetchAppointments = async () => {
+        try {
+            const response = await fetch('http://127.0.0.1:8080/api/appointments/all');
+            if (response.ok) {
+                const data = await response.json();
+                setAppointments(data);
+            }
+        } catch (error) {
+            console.error("Error fetching appointments:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchAppointments();
+    }, []);
+
     const stats = [
-        { label: "Total Patients", value: "6", icon: Users, color: "#0d9488" },
-        { label: "Waiting", value: "3", icon: Clock, color: "#ca8a04" },
-        { label: "Serving", value: "1", icon: Clock, color: "#3b82f6" },
-        { label: "Completed", value: "1", icon: CheckCircle2, color: "#16a34a" },
+        { label: "Total Patients", value: appointments.length.toString(), icon: Users, color: "#0d9488" },
+        { label: "Waiting", value: appointments.filter(a => a.status === "Waiting").length.toString(), icon: Clock, color: "#ca8a04" },
+        { label: "Serving", value: appointments.filter(a => a.status === "Serving").length.toString(), icon: Clock, color: "#3b82f6" },
+        { label: "Completed", value: appointments.filter(a => a.status === "Completed").length.toString(), icon: CheckCircle2, color: "#16a34a" },
     ];
 
     const getStatusType = (status) => {
@@ -30,6 +45,21 @@ const StaffDashboard = () => {
             case "Completed": return "completed";
             case "Cancelled": return "cancelled";
             default: return "default";
+        }
+    };
+
+    const updateStatus = async (id, newStatus) => {
+        try {
+            const response = await fetch(`http://127.0.0.1:8080/api/appointments/${id}/status`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newStatus)
+            });
+            if (response.ok) {
+                fetchAppointments();
+            }
+        } catch (error) {
+            console.error("Error updating status:", error);
         }
     };
 
@@ -75,46 +105,63 @@ const StaffDashboard = () => {
                                 <h2>Today's Appointments</h2>
                             </div>
                             <div className="date-picker-mock">
-                                <span>03/07/2026</span>
+                                <span>{new Date().toLocaleDateString()}</span>
                                 <Calendar size={16} />
                             </div>
                         </div>
 
                         <div className="status-filters">
-                            <span className="filter-chip waiting">Waiting: 3</span>
-                            <span className="filter-chip serving">Serving: 1</span>
-                            <span className="filter-chip completed">Completed: 1</span>
-                            <span className="filter-chip cancelled">Cancelled: 1</span>
+                            <span className="filter-chip waiting">Waiting: {appointments.filter(a => a.status === "Waiting").length}</span>
+                            <span className="filter-chip serving">Serving: {appointments.filter(a => a.status === "Serving").length}</span>
+                            <span className="filter-chip completed">Completed: {appointments.filter(a => a.status === "Completed").length}</span>
                         </div>
 
                         <div className="appointments-list">
-                            {appointments.slice(0, 4).map((app) => (
-                                <div key={app.id} className="appointment-item">
-                                    <div className="app-q-badge">{app.queueNumber}</div>
-                                    <div className="app-main-info">
-                                        <div className="app-name-row">
-                                            <h3>{app.patientName}</h3>
-                                            <span className={`status-tag ${getStatusType(app.status)}`}>
-                                                {app.status}
-                                            </span>
+                            {appointments.length === 0 ? (
+                                <div className="no-data">No appointments for today.</div>
+                            ) : (
+                                appointments.map((app) => (
+                                    <div key={app.id} className="appointment-item">
+                                        <div className="app-q-badge">{app.queueNumber}</div>
+                                        <div className="app-main-info">
+                                            <div className="app-name-row">
+                                                <h3>{app.patientName}</h3>
+                                                <span className={`status-tag ${getStatusType(app.status)}`}>
+                                                    {app.status}
+                                                </span>
+                                            </div>
+                                            <div className="app-details-row">
+                                                <div className="app-detail">
+                                                    <Slash size={14} className="rotate-45" />
+                                                    <span>{app.consultationType}</span>
+                                                </div>
+                                                <div className="app-detail">
+                                                    <Clock size={14} />
+                                                    <span>{app.timeSlot}</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="app-details-row">
-                                            <div className="app-detail">
-                                                <Slash size={14} className="rotate-45" />
-                                                <span>{app.consultationType}</span>
-                                            </div>
-                                            <div className="app-detail">
-                                                <Clock size={14} />
-                                                <span>{app.dateTime.split(" ")[1]}</span>
-                                            </div>
+                                        <div className="app-actions">
+                                            {app.status === "Waiting" && (
+                                                <button className="btn-notify" onClick={() => updateStatus(app.id, "Serving")}>Serve</button>
+                                            )}
+                                            {app.status === "Serving" && (
+                                                <button className="btn-notify" style={{ backgroundColor: '#16a34a' }} onClick={() => updateStatus(app.id, "Completed")}>Complete</button>
+                                            )}
+                                            <button
+                                                className="btn-text"
+                                                onClick={() => {
+                                                    if (window.confirm('Are you sure you want to cancel this appointment?')) {
+                                                        updateStatus(app.id, 'Cancelled');
+                                                    }
+                                                }}
+                                            >
+                                                Cancel
+                                            </button>
                                         </div>
                                     </div>
-                                    <div className="app-actions">
-                                        <button className="btn-text">Update Status <ChevronDown size={14} /></button>
-                                        <button className="btn-notify"><Bell size={14} /> Notify</button>
-                                    </div>
-                                </div>
-                            ))}
+                                ))
+                            )}
                         </div>
                     </div>
                 </div>

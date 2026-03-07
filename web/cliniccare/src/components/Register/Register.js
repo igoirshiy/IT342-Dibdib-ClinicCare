@@ -40,7 +40,7 @@ const Register = ({ onSwitchToLogin, onRegisterSuccess }) => {
         const validationErrors = validate();
         if (Object.keys(validationErrors).length === 0) {
             try {
-                const response = await fetch('http://localhost:8080/api/auth/register', {
+                const response = await fetch('http://127.0.0.1:8080/api/auth/register', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -54,8 +54,9 @@ const Register = ({ onSwitchToLogin, onRegisterSuccess }) => {
                 });
 
                 if (response.ok) {
+                    const userData = await response.json();
                     if (onRegisterSuccess) {
-                        onRegisterSuccess(formData.role);
+                        onRegisterSuccess(userData);
                     } else {
                         alert('Registration Successful!');
                         onSwitchToLogin();
@@ -74,72 +75,87 @@ const Register = ({ onSwitchToLogin, onRegisterSuccess }) => {
     };
 
     return (
-        <div className="register-container">
+        <div className="register-screen">
             <div className="register-card">
-                <h1>ClinicCare</h1>
-                <p className="subtitle">Join our community today</p>
-                <form onSubmit={handleSubmit} noValidate>
-                    <div className="form-group">
-                        <label htmlFor="fullName">Full Name</label>
-                        <input
-                            type="text"
-                            id="fullName"
-                            name="fullName"
-                            placeholder="John Doe"
-                            value={formData.fullName}
-                            onChange={handleChange}
-                            className={errors.fullName ? 'error' : ''}
-                        />
-                        {errors.fullName && <span className="error-message">{errors.fullName}</span>}
+                <div className="register-header">
+                    <h1>ClinicCare</h1>
+                    <p>Join our community today</p>
+                </div>
+                <form className="register-form" onSubmit={handleSubmit} noValidate>
+                    <div className="form-fields">
+                        <div className="form-group">
+                            <label htmlFor="fullName">Full Name</label>
+                            <input
+                                type="text"
+                                id="fullName"
+                                name="fullName"
+                                placeholder="John Doe"
+                                value={formData.fullName}
+                                onChange={handleChange}
+                                className={errors.fullName ? 'input-error' : ''}
+                            />
+                            {errors.fullName && <span className="error-message">{errors.fullName}</span>}
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="email">Email Address</label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="john@example.com"
+                                value={formData.email}
+                                onChange={handleChange}
+                                className={errors.email ? 'input-error' : ''}
+                            />
+                            {errors.email && <span className="error-message">{errors.email}</span>}
+                        </div>
+
+                        <div className="form-fields-row">
+                            <div className="form-group">
+                                <label htmlFor="password">Password</label>
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    placeholder="••••••••"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    className={errors.password ? 'input-error' : ''}
+                                />
+                                {errors.password && <span className="error-message">{errors.password}</span>}
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="confirmPassword">Confirm</label>
+                                <input
+                                    type="password"
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    placeholder="••••••••"
+                                    value={formData.confirmPassword}
+                                    onChange={handleChange}
+                                    className={errors.confirmPassword ? 'input-error' : ''}
+                                />
+                                {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="form-group">
-                        <label htmlFor="email">Email Address</label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            placeholder="john@example.com"
-                            value={formData.email}
-                            onChange={handleChange}
-                            className={errors.email ? 'error' : ''}
-                        />
-                        {errors.email && <span className="error-message">{errors.email}</span>}
+                    <div>
+                        <button
+                            type="submit"
+                            className="register-button"
+                        >
+                            Create Account
+                        </button>
                     </div>
-
-                    <div className="form-group">
-                        <label htmlFor="password">Password</label>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            placeholder="••••••••"
-                            value={formData.password}
-                            onChange={handleChange}
-                            className={errors.password ? 'error' : ''}
-                        />
-                        {errors.password && <span className="error-message">{errors.password}</span>}
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="confirmPassword">Confirm Password</label>
-                        <input
-                            type="password"
-                            id="confirmPassword"
-                            name="confirmPassword"
-                            placeholder="••••••••"
-                            value={formData.confirmPassword}
-                            onChange={handleChange}
-                            className={errors.confirmPassword ? 'error' : ''}
-                        />
-                        {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
-                    </div>
-
-                    <button type="submit" className="register-button">Create Account</button>
                 </form>
-                <p className="login-link">
-                    Already have an account? <a href="#login" onClick={(e) => { e.preventDefault(); onSwitchToLogin(); }}>Login</a>
-                </p>
+                <div className="register-footer">
+                    <p>
+                        Already have an account? <a href="#login" onClick={(e) => { e.preventDefault(); onSwitchToLogin(); }}>Login</a>
+                    </p>
+                </div>
             </div>
         </div>
     );

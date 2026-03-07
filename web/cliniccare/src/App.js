@@ -7,15 +7,17 @@ import Dashboard from './components/Dashboard/Dashboard';
 function App() {
   // view can be 'login', 'register', or 'dashboard'
   const [view, setView] = useState('login');
-  const [userRole, setUserRole] = useState('PATIENT');
+  const [user, setUser] = useState(null);
 
-  const handleLogin = (role) => {
-    setUserRole(role || 'PATIENT');
+  const handleLogin = (userData) => {
+    console.log("Logged in user:", userData);
+    setUser(userData);
     setView('dashboard');
   };
-  const handleRegister = (role) => {
+  const handleRegister = (userData) => {
+    console.log("Registered user:", userData);
     alert('Registration Successful!');
-    setUserRole(role || 'PATIENT');
+    setUser(userData);
     setView('dashboard');
   };
   const handleLogout = () => setView('login');
@@ -35,7 +37,11 @@ function App() {
         />
       )}
       {view === 'dashboard' && (
-        <Dashboard onLogout={handleLogout} userRole={userRole} />
+        <Dashboard
+          onLogout={handleLogout}
+          userRole={user?.role || 'PATIENT'}
+          user={user}
+        />
       )}
     </div>
   );
