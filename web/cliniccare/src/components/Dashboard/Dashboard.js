@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import DashboardCards from "./DashboardCards";
-import AppointmentList from "./AppointmentList";
+import NotificationCenter from "./NotificationCenter";
+import StaffDashboard from "./StaffDashboard";
 import BookingModal from "./BookingModal";
 import "./Dashboard.css";
 
-const Dashboard = ({ onLogout }) => {
-    const [activeKey, setActiveKey] = useState("dashboard");
+const Dashboard = ({ onLogout, userRole }) => {
+    const [activeKey, setActiveKey] = useState(userRole === 'STAFF' ? 'staff' : 'dashboard');
     const [isBookingOpen, setIsBookingOpen] = useState(false);
 
     return (
@@ -16,17 +17,27 @@ const Dashboard = ({ onLogout }) => {
                 activeKey={activeKey}
                 onNavigate={setActiveKey}
                 onLogout={onLogout}
+                userRole={userRole}
             />
             <main className="dashboard-main">
                 <Header />
                 <div className="dashboard-content">
-                    {activeKey === "dashboard" && (
+                    {activeKey === "dashboard" && userRole !== 'STAFF' && (
                         <>
                             <DashboardCards onBookClick={() => setIsBookingOpen(true)} />
-                            <AppointmentList />
+                            <NotificationCenter />
                         </>
                     )}
-                    {activeKey !== "dashboard" && (
+                    {activeKey === "staff" && userRole === 'STAFF' && <StaffDashboard />}
+                    {activeKey === "dashboard" && userRole === 'STAFF' && (
+                        <div className="glass-card" style={{ padding: '40px', textAlign: 'center' }}>
+                            <h3>Welcome, Staff</h3>
+                            <p style={{ marginTop: '20px', color: '#64748b' }}>
+                                Please use the Sidebar to navigate to the Staff View.
+                            </p>
+                        </div>
+                    )}
+                    {activeKey !== "dashboard" && activeKey !== "staff" && (
                         <div className="glass-card" style={{ padding: '40px', textAlign: 'center' }}>
                             <h3>{activeKey.charAt(0).toUpperCase() + activeKey.slice(1)} Section</h3>
                             <p style={{ marginTop: '20px', color: '#64748b' }}>

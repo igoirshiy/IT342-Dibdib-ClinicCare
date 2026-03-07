@@ -45,8 +45,9 @@ const Login = ({ onSwitchToRegister, onLogin }) => {
                 });
 
                 if (response.ok) {
+                    const userData = await response.json();
                     alert('Login Successful!');
-                    if (onLogin) onLogin();
+                    if (onLogin) onLogin(userData.role);
                 } else {
                     const errorText = await response.text();
                     alert('Login Failed: ' + errorText);

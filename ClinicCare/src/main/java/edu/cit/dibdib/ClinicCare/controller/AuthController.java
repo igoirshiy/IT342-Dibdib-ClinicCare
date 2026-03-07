@@ -26,11 +26,18 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody User loginRequest) {
         System.out.println("Login attempt for email: " + loginRequest.getEmail());
+
+        // Authentication will now be handled entirely via the database query below
+
         return userRepository.findByEmail(loginRequest.getEmail())
                 .map(user -> {
                     if (user.getPassword().equals(loginRequest.getPassword())) {
                         System.out.println("Login success for: " + loginRequest.getEmail());
-                        return ResponseEntity.ok("Login successful!");
+                        // Ensure role is not null
+                        if (user.getRole() == null) {
+                            user.setRole("PATIENT");
+                        }
+                        return ResponseEntity.ok(user); // Return the full user object
                     } else {
                         System.out.println("Login failed: Invalid password for " + loginRequest.getEmail());
                         return ResponseEntity.status(401).body("Error: Invalid password!");

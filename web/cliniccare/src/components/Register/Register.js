@@ -6,7 +6,8 @@ const Register = ({ onSwitchToLogin, onRegisterSuccess }) => {
         fullName: '',
         email: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        role: 'PATIENT'
     });
 
     const [errors, setErrors] = useState({});
@@ -47,13 +48,14 @@ const Register = ({ onSwitchToLogin, onRegisterSuccess }) => {
                     body: JSON.stringify({
                         fullName: formData.fullName,
                         email: formData.email,
-                        password: formData.password
+                        password: formData.password,
+                        role: formData.role
                     }),
                 });
 
                 if (response.ok) {
                     if (onRegisterSuccess) {
-                        onRegisterSuccess();
+                        onRegisterSuccess(formData.role);
                     } else {
                         alert('Registration Successful!');
                         onSwitchToLogin();

@@ -24,4 +24,7 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = true) // Allow null initially for existing data compatibility
+    private String role = "PATIENT"; // Default role
 }

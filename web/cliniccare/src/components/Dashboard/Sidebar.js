@@ -5,11 +5,11 @@ import {
     CalendarPlus,
     CalendarCheck,
     Users,
-    User,
     LogOut,
     Menu,
     X,
     Activity,
+    Stethoscope,
 } from "lucide-react";
 
 const navItems = [
@@ -17,11 +17,18 @@ const navItems = [
     { icon: CalendarPlus, label: "Book Appointment", key: "book" },
     { icon: CalendarCheck, label: "My Appointments", key: "appointments" },
     { icon: Users, label: "Queue Status", key: "queue" },
-    { icon: User, label: "Profile", key: "profile" },
+    { icon: Stethoscope, label: "Staff View", key: "staff" },
 ];
 
-const Sidebar = ({ activeKey, onNavigate, onLogout }) => {
+const Sidebar = ({ activeKey, onNavigate, onLogout, userRole }) => {
     const [mobileOpen, setMobileOpen] = useState(false);
+
+    const filteredNavItems = navItems.filter(item => {
+        if (userRole === 'STAFF') {
+            return item.key === 'staff' || item.key === 'dashboard' || item.key === 'profile';
+        }
+        return item.key !== 'staff';
+    });
 
     return (
         <>
@@ -44,7 +51,7 @@ const Sidebar = ({ activeKey, onNavigate, onLogout }) => {
                 </div>
 
                 <nav className="sidebar-nav">
-                    {navItems.map((item) => {
+                    {filteredNavItems.map((item) => {
                         const Icon = item.icon;
                         return (
                             <button
