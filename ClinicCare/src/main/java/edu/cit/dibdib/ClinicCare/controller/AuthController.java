@@ -1,6 +1,8 @@
 package edu.cit.dibdib.ClinicCare.controller;
 
+import edu.cit.dibdib.ClinicCare.model.Staff;
 import edu.cit.dibdib.ClinicCare.model.User;
+import edu.cit.dibdib.ClinicCare.repository.StaffRepository;
 import edu.cit.dibdib.ClinicCare.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +15,13 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private StaffRepository staffRepository;
+
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+        if (userRepository.findByEmail(user.getEmail()).isPresent() || 
+            staffRepository.findByEmail(user.getEmail()).isPresent()) {
             return ResponseEntity.badRequest().body("Error: Email is already in use!");
         }
 
@@ -27,25 +33,32 @@ public class AuthController {
     public ResponseEntity<?> loginUser(@RequestBody User loginRequest) {
         System.out.println("Login attempt for email: " + loginRequest.getEmail());
 
-        // Authentication will now be handled entirely via the database query below
+        // 1. Check Patients (users table)
+        var patientOpt = userRepository.findByEmail(loginRequest.getEmail());
+        if (patientOpt.isPresent()) {
+            User patient = patientOpt.get();
+            if (patient.getPassword().equals(loginRequest.getPassword())) {
+                System.out.println("Patient login success: " + loginRequest.getEmail());
+                if (patient.getRole() == null) patient.setRole("PATIENT");
+                return ResponseEntity.ok(patient);
+            } else {
+                return ResponseEntity.status(401).body("Error: Invalid password!");
+            }
+        }
 
-        return userRepository.findByEmail(loginRequest.getEmail())
-                .map(user -> {
-                    if (user.getPassword().equals(loginRequest.getPassword())) {
-                        System.out.println("Login success for: " + loginRequest.getEmail());
-                        // Ensure role is not null
-                        if (user.getRole() == null) {
-                            user.setRole("PATIENT");
-                        }
-                        return ResponseEntity.ok(user); // Return the full user object
-                    } else {
-                        System.out.println("Login failed: Invalid password for " + loginRequest.getEmail());
-                        return ResponseEntity.status(401).body("Error: Invalid password!");
-                    }
-                })
-                .orElseGet(() -> {
-                    System.out.println("Login failed: User not found with email " + loginRequest.getEmail());
-                    return ResponseEntity.status(401).body("Error: User not found!");
-                });
+        // 2. Check Staff (staff table)
+        var staffOpt = staffRepository.findByEmail(loginRequest.getEmail());
+        if (staffOpt.isPresent()) {
+            Staff staff = staffOpt.get();
+            if (staff.getPassword().equals(loginRequest.getPassword())) {
+                System.out.println("Staff login success: " + loginRequest.getEmail());
+                return ResponseEntity.ok(staff);
+            } else {
+                return ResponseEntity.status(401).body("Error: Invalid password!");
+            }
+        }
+
+        System.out.println("Login failed: User not found with email " + loginRequest.getEmail());
+        return ResponseEntity.status(401).body("Error: User not found!");
     }
 }

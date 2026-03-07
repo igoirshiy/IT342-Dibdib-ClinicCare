@@ -1,5 +1,10 @@
 package edu.cit.dibdib.ClinicCare;
 
+import edu.cit.dibdib.ClinicCare.model.Staff;
+import edu.cit.dibdib.ClinicCare.model.User;
+import edu.cit.dibdib.ClinicCare.repository.StaffRepository;
+import edu.cit.dibdib.ClinicCare.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -33,6 +38,21 @@ public class ClinicCareApplication {
 				System.out.println("Role column check and update complete.");
 			} catch (Exception e) {
 				System.out.println("Info: Role column check/update skipped: " + e.getMessage());
+			}
+
+			// Create staff table if not exists
+			try {
+				System.out.println("Checking/Creating staff table...");
+				jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS staff (" +
+						"id BIGSERIAL PRIMARY KEY, " +
+						"full_name VARCHAR(255) NOT NULL, " +
+						"email VARCHAR(255) NOT NULL UNIQUE, " +
+						"password VARCHAR(255) NOT NULL, " +
+						"role VARCHAR(255) DEFAULT 'STAFF'" +
+						")");
+				System.out.println("Staff table ready.");
+			} catch (Exception e) {
+				System.out.println("Error creating staff table: " + e.getMessage());
 			}
 
 			System.out.println("Database setup complete!");
