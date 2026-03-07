@@ -52,7 +52,7 @@
 .modal-header-text h2 {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #1a3a5c;
+    color: #500732;
     margin: 0;
 }
 
@@ -93,7 +93,7 @@
 .form-group label {
     font-size: 0.9rem;
     font-weight: 600;
-    color: #1a3a5c;
+    color: #500732;
 }
 
 .form-row {
@@ -142,9 +142,9 @@
 .modal-form input:focus,
 .modal-form textarea:focus {
     outline: none;
-    border-color: #3b82f6;
+    border-color: #ec4899;
     background: #fff;
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.1);
 }
 
 .field-note {
@@ -171,13 +171,13 @@
 }
 
 .slot-card:hover:not(:disabled) {
-    border-color: #3b82f6;
-    background: rgba(59, 130, 246, 0.05);
+    border-color: #ec4899;
+    background: rgba(236, 72, 153, 0.05);
 }
 
 .slot-selected {
-    background: #3b82f6 !important;
-    border-color: #3b82f6 !important;
+    background: #ec4899 !important;
+    border-color: #ec4899 !important;
     color: #fff !important;
 }
 
@@ -189,7 +189,7 @@
 .slot-time {
     font-size: 0.85rem;
     font-weight: 700;
-    color: #1a3a5c;
+    color: #500732;
 }
 
 .slot-capacity {
@@ -223,19 +223,19 @@
 }
 
 .btn-primary {
-    background: #3b82f6;
+    background: #ec4899;
     color: white;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 4px 12px rgba(236, 72, 153, 0.2);
 }
 
 .btn-primary:hover {
-    background: #2563eb;
+    background: #d946ef;
     transform: translateY(-1px);
 }
 
 .btn-secondary {
     background: rgba(0, 0, 0, 0.05);
-    color: #1a3a5c;
+    color: #500732;
 }
 
 .btn-secondary:hover {

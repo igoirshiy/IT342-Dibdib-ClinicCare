@@ -14,12 +14,12 @@
 .header-welcome h2 {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #1a3a5c;
+    color: #500732;
     margin: 0;
 }
 
 .header-name {
-    color: #3b82f6;
+    color: #d946ef;
 }
 
 .header-subtitle {
@@ -47,8 +47,8 @@
 }
 
 .header-notification:hover {
-    background: rgba(59, 130, 246, 0.1);
-    color: #1e40af;
+    background: rgba(217, 70, 239, 0.1);
+    color: #9d174d;
 }
 
 .header-notification-badge {
@@ -71,14 +71,14 @@
     width: 42px;
     height: 42px;
     border-radius: 14px;
-    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+    background: linear-gradient(135deg, #d946ef, #f472b6);
     display: flex;
     align-items: center;
     justify-content: center;
     color: #fff;
     font-weight: 700;
     font-size: 1rem;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 4px 12px rgba(217, 70, 239, 0.3);
 }
 
 @media (max-width: 768px) {

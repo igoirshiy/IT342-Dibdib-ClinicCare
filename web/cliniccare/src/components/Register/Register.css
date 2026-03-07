@@ -1,10 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-    --primary-color: #4361ee;
-    --accent-color: #4cc9f0;
+    --primary-color: #ec4899;
+    --accent-color: #f472b6;
     --text-color: #2b2d42;
-    --bg-gradient: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+    --bg-gradient: linear-gradient(135deg, #ec4899 0%, #9d174d 100%);
     --card-bg: rgba(255, 255, 255, 0.85);
     --glass-blur: 15px;
 }
@@ -40,8 +40,15 @@
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .register-card h1 {
@@ -83,7 +90,7 @@
 .form-group input:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.1);
+    box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.1);
     transform: translateY(-2px);
 }
 
@@ -110,13 +117,13 @@
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
     margin-top: 10px;
-    box-shadow: 0 8px 15px rgba(67, 97, 238, 0.2);
+    box-shadow: 0 8px 15px rgba(236, 72, 153, 0.2);
 }
 
 .register-button:hover {
-    background: #3a0ca3;
+    background: #9d174d;
     transform: translateY(-3px);
-    box-shadow: 0 12px 20px rgba(67, 97, 238, 0.3);
+    box-shadow: 0 12px 20px rgba(236, 72, 153, 0.3);
 }
 
 .register-button:active {
@@ -137,7 +144,7 @@
 }
 
 .login-link a:hover {
-    color: #3a0ca3;
+    color: #9d174d;
     text-decoration: underline;
 }
 
