@@ -59,3 +59,34 @@ The frontend should automatically open in your browser at `http://localhost:3000
 ---
 
 **Note:** All three terminals should remain open while the system is running.
+
+
+
+ENSURE THE PC THAT IT HAVE Java JDK, Node.js, npm, and Git installed--
+
+
+TO CHECK THE TOOLS IN WINDOW:
+java -version
+node --version
+npm --version
+git --version
+(If a tool is installed, you'll see the version number. If not, you'll get a "not found" error)
+
+
+if not in pc:
+Java JDK=
+Download from: https://www.oracle.com/java/technologies/downloads/
+Choose Windows x64 Installer
+Run the installer and follow the prompts
+Verify: java -version
+
+Node.js (includes npm)=
+Download from: https://nodejs.org/
+Choose the LTS (Long Term Support) version
+Run the installer
+Verify: node --version and npm --version
+
+Git=
+Download from: https://git-scm.com/download/win
+Run the installer with default settings
+Verify: git --version
