@@ -2,11 +2,14 @@ import React from "react";
 import "./Header.css";
 import { Bell } from "lucide-react";
 
-const Header = () => {
+const Header = ({ user }) => {
+    const userName = user?.fullName || user?.name || "Patient";
+    const userInitial = userName.charAt(0).toUpperCase();
+
     return (
         <header className="header">
             <div className="header-welcome">
-                <h2>Welcome back, <span className="header-name">Patient</span></h2>
+                <h2>Welcome back, <span className="header-name">{userName}</span></h2>
                 <p className="header-subtitle">Here's your health overview</p>
             </div>
             <div className="header-actions">
@@ -15,7 +18,7 @@ const Header = () => {
                     <span className="header-notification-badge">3</span>
                 </button>
                 <div className="header-avatar">
-                    <span>P</span>
+                    <span>{userInitial}</span>
                 </div>
             </div>
         </header>

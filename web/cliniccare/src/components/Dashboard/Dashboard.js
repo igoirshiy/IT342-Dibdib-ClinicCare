@@ -20,7 +20,7 @@ const Dashboard = ({ onLogout, userRole, user }) => {
                 userRole={userRole}
             />
             <main className="dashboard-main">
-                <Header />
+                {activeKey !== "staff" && <Header user={user} />}
                 <div className="dashboard-content">
                     {activeKey === "dashboard" && userRole !== 'STAFF' && (
                         <>

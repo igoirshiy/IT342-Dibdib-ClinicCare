@@ -1,0 +1,272 @@
+.slot-manager {
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 28px;
+  height: 100%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+}
+
+.slot-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.slot-item {
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.slot-item:hover {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.slot-item--disabled {
+  opacity: 0.6;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.slot-item-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.slot-doctor {
+  margin: 0 0 4px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.slot-date {
+  display: block;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.slot-badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.slot-badge--off {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.slot-time-row {
+  margin-bottom: 12px;
+}
+
+.slot-time {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #1a3a5c;
+}
+
+.slot-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.slot-time-input {
+  padding: 8px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.slot-time-sep {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.slot-capacity {
+  margin-bottom: 12px;
+}
+
+.slot-capacity-bar {
+  width: 100%;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.slot-capacity-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.slot-capacity-text {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.slot-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.slot-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.slot-btn--edit {
+  background: #3b82f6;
+  color: white;
+  flex: 1;
+}
+
+.slot-btn--edit:hover {
+  background: #2563eb;
+}
+
+.slot-btn--disable {
+  background: #f59e0b;
+  color: white;
+  flex: 1;
+}
+
+.slot-btn--disable:hover {
+  background: #d97706;
+}
+
+.slot-btn--enable {
+  background: #10b981;
+  color: white;
+  flex: 1;
+}
+
+.slot-btn--enable:hover {
+  background: #059669;
+}
+
+.slot-btn--save {
+  background: #10b981;
+  color: white;
+}
+
+.slot-btn--save:hover {
+  background: #059669;
+}
+
+.slot-btn--cancel {
+  background: #ef4444;
+  color: white;
+  padding: 8px 10px;
+}
+
+.slot-btn--cancel:hover {
+  background: #dc2626;
+}
+
+.slot-btn--add {
+  width: 100%;
+  background: #3b82f6;
+  color: white;
+  margin-top: 12px;
+}
+
+.slot-btn--add:hover {
+  background: #2563eb;
+}
+
+.slot-add-form {
+  padding: 20px;
+  background: rgba(59, 130, 246, 0.05);
+  border: 2px dashed #3b82f6;
+  border-radius: 10px;
+  margin-top: 16px;
+}
+
+.slot-add-title {
+  margin: 0 0 15px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.slot-add-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.slot-input {
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-family: inherit;
+}
+
+.slot-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.slot-add-times {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.slot-add-times .slot-time-input {
+  flex: 1;
+}
+
+.slot-add-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.slot-add-actions .slot-btn {
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .slot-item {
+    padding: 12px;
+  }
+
+  .slot-actions {
+    flex-direction: column;
+  }
+
+  .slot-btn--edit,
+  .slot-btn--disable,
+  .slot-btn--enable {
+    width: 100%;
+  }
+}

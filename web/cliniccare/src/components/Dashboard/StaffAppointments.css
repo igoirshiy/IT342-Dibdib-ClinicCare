@@ -1,0 +1,267 @@
+.staff-appt-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 28px;
+  height: 100%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: visible;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  padding-bottom: 18px;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.card-header svg {
+  color: #3b82f6;
+}
+
+.staff-appt-count {
+  margin-left: auto;
+  background: #3b82f6;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.staff-appt-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 8px;
+  padding-bottom: 8px;
+  overflow-x: visible;
+}
+
+.staff-appt-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.staff-appt-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.staff-appt-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.staff-appt-item {
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  isolation: isolate;
+}
+
+.staff-appt-item:hover {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.staff-appt-item--faded {
+  opacity: 0.6;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.staff-appt-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 16px;
+}
+
+.staff-appt-left {
+  flex: 1;
+}
+
+.staff-appt-patient {
+  margin: 0 0 6px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.staff-appt-type {
+  display: block;
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+
+.staff-appt-datetime {
+  display: block;
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.staff-appt-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.staff-appt-queue {
+  font-weight: 700;
+  color: #3b82f6;
+  font-size: 0.9rem;
+}
+
+.staff-appt-status {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.staff-status--waiting {
+  background: #fef3c7;
+  color: #ca8a04;
+}
+
+.staff-status--serving {
+  background: #dbeafe;
+  color: #0284c7;
+}
+
+.staff-status--completed {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.staff-status--cancelled {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.staff-appt-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.staff-status-dropdown {
+  position: relative;
+  flex: 1;
+  z-index: 20;
+}
+
+.staff-action-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  background: #3b82f6;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.staff-action-btn:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+.staff-action-btn--notify {
+  background: #8b5cf6;
+}
+
+.staff-action-btn--notify:hover {
+  background: #7c3aed;
+}
+
+.staff-status-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 8px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  z-index: 50;
+  min-width: 140px;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.staff-status-option {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  background: none;
+  color: inherit;
+  text-align: left;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.staff-status-option:hover {
+  background: #f1f5f9;
+}
+
+.staff-status-option:first-child {
+  border-radius: 8px 8px 0 0;
+}
+
+.staff-status-option:last-child {
+  border-radius: 0 0 8px 8px;
+}
+
+@media (max-width: 768px) {
+  .staff-appt-item {
+    padding: 12px;
+  }
+
+  .staff-appt-actions {
+    flex-direction: column;
+  }
+
+  .staff-action-btn {
+    flex: 1;
+  }
+}
