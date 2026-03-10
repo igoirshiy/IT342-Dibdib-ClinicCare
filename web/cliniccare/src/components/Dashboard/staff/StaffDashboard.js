@@ -1,7 +1,7 @@
 import React from "react";
 import StaffHeader from "./StaffHeader";
 import StaffAppointmentList from "./StaffAppointmentList";
-import SlotManager from "./SlotManager";
+import SlotManager from "../patient/SlotManager";
 import "./StaffDashboard.css";
 
 const StaffDashboard = () => {

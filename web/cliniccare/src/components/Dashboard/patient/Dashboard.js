@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Sidebar from "./Sidebar";
+import Sidebar from "../common/Sidebar";
 import Header from "./Header";
 import DashboardCards from "./DashboardCards";
-import NotificationCenter from "./NotificationCenter";
-import StaffDashboard from "./StaffDashboard";
+import NotificationCenter from "../common/NotificationCenter";
+import StaffDashboard from "../staff/StaffDashboard";
 import BookingModal from "./BookingModal";
 import "./Dashboard.css";
 
