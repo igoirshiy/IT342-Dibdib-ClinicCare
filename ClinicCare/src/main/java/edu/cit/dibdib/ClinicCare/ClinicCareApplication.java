@@ -57,11 +57,10 @@ public class ClinicCareApplication {
 
 			// Create appointments table if not exists
 			try {
-				System.out.println("Forcefully recreating appointments table for schema sync...");
-				// Temporarily dropping to ensure columns are clean during development
-				jdbcTemplate.execute("DROP TABLE IF EXISTS appointments CASCADE");
+				System.out.println("Ensuring appointments table exists for schema sync...");
+				// Removed DROP TABLE to ensure data persistence
 				
-				jdbcTemplate.execute("CREATE TABLE appointments (" +
+				jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS appointments (" +
 						"id BIGSERIAL PRIMARY KEY, " +
 						"patient_email VARCHAR(255) NOT NULL, " +
 						"patient_name VARCHAR(255) NOT NULL, " +
