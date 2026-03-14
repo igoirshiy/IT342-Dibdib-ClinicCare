@@ -77,6 +77,37 @@ public class ClinicCareApplication {
 				System.out.println("Error syncing appointments table: " + e.getMessage());
 			}
 
+			// Create slots table if not exists
+			try {
+				System.out.println("Checking/Creating slots table...");
+				jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS slots (" +
+						"id BIGSERIAL PRIMARY KEY, " +
+						"doctor VARCHAR(255) NOT NULL, " +
+						"date VARCHAR(255) NOT NULL, " +
+						"start_time VARCHAR(255) NOT NULL, " +
+						"end_time VARCHAR(255) NOT NULL, " +
+						"capacity INTEGER NOT NULL, " +
+						"booked INTEGER DEFAULT 0, " +
+						"disabled BOOLEAN DEFAULT FALSE" +
+						")");
+				System.out.println("Slots table ready.");
+			} catch (Exception e) {
+				System.out.println("Error creating slots table: " + e.getMessage());
+			}
+
+			// Create doctors table if not exists
+			try {
+				System.out.println("Checking/Creating doctors table...");
+				jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS doctors (" +
+						"id BIGSERIAL PRIMARY KEY, " +
+						"doctor_name VARCHAR(255) NOT NULL UNIQUE, " +
+						"queue_letter VARCHAR(2) NOT NULL" +
+						")");
+				System.out.println("Doctors table ready.");
+			} catch (Exception e) {
+				System.out.println("Error creating doctors table: " + e.getMessage());
+			}
+
 			System.out.println("Database setup complete!");
 		};
 	}

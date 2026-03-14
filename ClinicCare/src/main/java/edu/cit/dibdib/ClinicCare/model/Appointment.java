@@ -43,4 +43,7 @@ public class Appointment {
 
     @Column(name = "queue_number")
     private String queueNumber;
+
+    @Transient // Not saved to DB, just for incoming request
+    private Long selectedSlotId;
 }

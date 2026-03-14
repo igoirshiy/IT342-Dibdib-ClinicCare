@@ -40,7 +40,7 @@ const DashboardCards = ({ onBookClick, user }) => {
                     <div className="card-body">
                         <div className="card-detail">
                             <span className="card-label">Doctor</span>
-                            <span className="card-value">{latest.doctorName}</span>
+                            <span className="card-value">Doc {latest.doctorName}</span>
                         </div>
                         <div className="card-detail">
                             <span className="card-label">Date</span>

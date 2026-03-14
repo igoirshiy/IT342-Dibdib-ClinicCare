@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Calendar, User, ChevronDown } from 'lucide-react';
 import './BookingModal.css';
 
@@ -8,9 +8,63 @@ const BookingModal = ({ isOpen, onClose, user }) => {
         date: '',
         timeSlot: '',
         doctor: '',
-        reason: ''
+        reason: '',
+        selectedSlotId: null
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [allSlots, setAllSlots] = useState([]);
+    const [availableSlots, setAvailableSlots] = useState([]);
+    const [isLoadingSlots, setIsLoadingSlots] = useState(false);
+
+    useEffect(() => {
+        if (isOpen) {
+            fetchAllSlots();
+            // Auto-refresh slots every 5 seconds while modal is open
+            const interval = setInterval(fetchAllSlots, 5000);
+            return () => clearInterval(interval);
+        }
+    }, [isOpen]);
+
+    const fetchAllSlots = async () => {
+        setIsLoadingSlots(true);
+        try {
+            // Add timestamp to bus cache
+            const response = await fetch(`http://127.0.0.1:8080/api/slots?t=${Date.now()}`, {
+                headers: {
+                    'Cache-Control': 'no-cache',
+                    'Pragma': 'no-cache'
+                }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                console.log("[DEBUG] Fetched slots:", data.length);
+                setAllSlots(data);
+            }
+        } catch (error) {
+            console.error("Error fetching slots:", error);
+        } finally {
+            setIsLoadingSlots(false);
+        }
+    };
+
+    useEffect(() => {
+        // Filter available slots based on selected date and doctor
+        if (formData.date && formData.doctor) {
+            const filtered = allSlots.filter(s =>
+                s.doctor === formData.doctor &&
+                s.date === formData.date &&
+                !s.disabled
+            );
+            setAvailableSlots(filtered);
+        } else {
+            setAvailableSlots([]);
+        }
+    }, [formData.date, formData.doctor, allSlots]);
+
+    // Derive dynamic doctor list based on selected date
+    const availableDoctors = formData.date
+        ? [...new Set(allSlots.filter(s => s.date === formData.date && !s.disabled).map(s => s.doctor))]
+        : [...new Set(allSlots.filter(s => !s.disabled).map(s => s.doctor))];
 
     if (!isOpen) return null;
 
@@ -40,8 +94,11 @@ const BookingModal = ({ isOpen, onClose, user }) => {
                 appointmentDate: formData.date,
                 timeSlot: formData.timeSlot,
                 reason: formData.reason,
-                status: 'Waiting'
+                status: 'Waiting',
+                selectedSlotId: formData.selectedSlotId // Send the ID to backend
             };
+
+            console.log("[DEBUG] Sending booking payload with Slot ID:", formData.selectedSlotId);
 
             console.log("Full Booking Payload:", payload);
             console.log("Current User Object:", user);
@@ -80,14 +137,6 @@ const BookingModal = ({ isOpen, onClose, user }) => {
         }
     };
 
-    const timeSlots = [
-        { time: "07:30 – 08:00 AM", left: 2, full: false },
-        { time: "08:30 – 09:00 AM", left: 1, full: false },
-        { time: "09:30 – 10:00 AM", left: 0, full: true },
-        { time: "10:30 – 11:00 AM", left: 3, full: false },
-    ];
-
-    const doctors = ["Dr. Santos", "Dr. Reyes", "Dr. Cruz"];
     const consultationTypes = [
         "General Check-up",
         "Follow-up Consultation",
@@ -167,7 +216,11 @@ const BookingModal = ({ isOpen, onClose, user }) => {
                                     onChange={(e) => setFormData({ ...formData, doctor: e.target.value })}
                                 >
                                     <option value="" disabled>Select Doctor</option>
-                                    {doctors.map(d => <option key={d} value={d}>{d}</option>)}
+                                    {availableDoctors.length === 0 ? (
+                                        <option disabled>No doctors available</option>
+                                    ) : (
+                                        availableDoctors.map(d => <option key={d} value={d}>Doc {d}</option>)
+                                    )}
                                 </select>
                                 <User size={18} className="select-icon" />
                             </div>
@@ -176,22 +229,40 @@ const BookingModal = ({ isOpen, onClose, user }) => {
 
                     <div className="form-group">
                         <label>Available Time Slots</label>
-                        <div className="time-slots-grid">
-                            {timeSlots.map((slot, index) => (
-                                <button
-                                    key={index}
-                                    type="button"
-                                    disabled={slot.full}
-                                    className={`slot-card ${formData.timeSlot === slot.time ? 'slot-selected' : ''} ${slot.full ? 'slot-full' : ''}`}
-                                    onClick={() => setFormData({ ...formData, timeSlot: slot.time })}
-                                >
-                                    <span className="slot-time">{slot.time}</span>
-                                    <span className="slot-capacity">
-                                        {slot.full ? 'FULL' : `${slot.left} slots left`}
-                                    </span>
-                                </button>
-                            ))}
-                        </div>
+                        {!formData.date || !formData.doctor ? (
+                            <p className="field-note" style={{ textAlign: 'center', padding: '10px', background: '#f8fafc', borderRadius: '8px' }}>
+                                Please select a date and doctor to see available times.
+                            </p>
+                        ) : isLoadingSlots ? (
+                            <p className="field-note" style={{ textAlign: 'center' }}>Loading slots...</p>
+                        ) : availableSlots.length === 0 ? (
+                            <p className="field-note" style={{ textAlign: 'center', padding: '10px', background: '#fff1f2', color: '#be123c', borderRadius: '8px' }}>
+                                No available slots found for this selection.
+                            </p>
+                        ) : (
+                            <div className="time-slots-grid">
+                                {availableSlots.map((slot) => {
+                                    const timeRange = `${formatBookingTime(slot.startTime)} – ${formatBookingTime(slot.endTime)}`;
+                                    const isFull = slot.booked >= slot.capacity;
+                                    const left = slot.capacity - slot.booked;
+
+                                    return (
+                                        <button
+                                            key={slot.id}
+                                            type="button"
+                                            disabled={isFull}
+                                            className={`slot-card ${formData.timeSlot === timeRange ? 'slot-selected' : ''} ${isFull ? 'slot-full' : ''}`}
+                                            onClick={() => setFormData({ ...formData, timeSlot: timeRange, selectedSlotId: slot.id })}
+                                        >
+                                            <span className="slot-time">{timeRange}</span>
+                                            <span className="slot-capacity">
+                                                {isFull ? 'FULL' : `${left} slots left`}
+                                            </span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        )}
                     </div>
 
                     <div className="form-group">
@@ -218,6 +289,18 @@ const BookingModal = ({ isOpen, onClose, user }) => {
             </div>
         </div>
     );
+};
+
+const formatBookingTime = (t) => {
+    if (!t) return "";
+    try {
+        const [h, m] = t.split(":").map(Number);
+        const ampm = h >= 12 ? "PM" : "AM";
+        const hr = h % 12 || 12;
+        return `${hr}:${m.toString().padStart(2, '0')} ${ampm}`;
+    } catch (e) {
+        return t;
+    }
 };
 
 export default BookingModal;
