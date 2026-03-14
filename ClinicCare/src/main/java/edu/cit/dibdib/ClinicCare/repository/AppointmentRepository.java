@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
     List<Appointment> findByPatientEmail(String patientEmail);
-    List<Appointment> findByAppointmentDate(LocalDate date);
+    List<Appointment> findByAppointmentDateOrderByTimeSlotAsc(LocalDate date);
     long countByAppointmentDate(LocalDate date);
 }

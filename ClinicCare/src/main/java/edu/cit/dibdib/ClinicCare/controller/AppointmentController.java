@@ -38,7 +38,7 @@ public class AppointmentController {
     public List<Appointment> getTodayAppointments() {
         LocalDate today = LocalDate.now();
         System.out.println("Fetching appointments for today: " + today);
-        List<Appointment> apps = appointmentRepository.findByAppointmentDate(today);
+        List<Appointment> apps = appointmentRepository.findByAppointmentDateOrderByTimeSlotAsc(today);
         System.out.println("Found " + apps.size() + " appointments.");
         return apps;
     }

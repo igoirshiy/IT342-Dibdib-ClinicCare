@@ -6,14 +6,20 @@ import "./StaffAppointments.css";
 const StaffAppointmentList = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [viewAll, setViewAll] = useState(false);
 
   useEffect(() => {
     fetchAppointments();
-  }, []);
+
+    // Set up polling for real-time updates every 10 seconds
+    const interval = setInterval(fetchAppointments, 10000);
+    return () => clearInterval(interval);
+  }, [viewAll]);
 
   const fetchAppointments = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8080/api/appointments/all");
+      const endpoint = viewAll ? "all" : "today";
+      const response = await fetch(`http://127.0.0.1:8080/api/appointments/${endpoint}`);
       if (response.ok) {
         const data = await response.json();
         setAppointments(data);
@@ -48,10 +54,28 @@ const StaffAppointmentList = () => {
 
   return (
     <div className="staff-appt-card glass-card">
-      <div className="card-header">
-        <CalendarCheck size={22} />
-        <h3>Today's Appointments</h3>
-        <span className="staff-appt-count">{appointments.length}</span>
+      <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <CalendarCheck size={22} />
+          <h3>{viewAll ? "All Appointments" : "Today's Appointments"}</h3>
+          <span className="staff-appt-count">{appointments.length}</span>
+        </div>
+        <div className="view-toggle">
+          <button
+            className={`toggle-btn ${!viewAll ? 'active' : ''}`}
+            onClick={() => setViewAll(false)}
+            style={{ padding: '4px 12px', borderRadius: '20px', border: '1px solid #e2e8f0', background: !viewAll ? '#3b82f6' : 'transparent', color: !viewAll ? 'white' : '#64748b', fontSize: '0.8rem', cursor: 'pointer' }}
+          >
+            Today
+          </button>
+          <button
+            className={`toggle-btn ${viewAll ? 'active' : ''}`}
+            onClick={() => setViewAll(true)}
+            style={{ padding: '4px 12px', borderRadius: '20px', border: '1px solid #e2e8f0', background: viewAll ? '#3b82f6' : 'transparent', color: viewAll ? 'white' : '#64748b', fontSize: '0.8rem', cursor: 'pointer', marginLeft: '4px' }}
+          >
+            All
+          </button>
+        </div>
       </div>
       <div className="staff-appt-scroll">
         {appointments.length === 0 ? (
