@@ -19,16 +19,37 @@ public class AuthController {
     @Autowired
     private StaffRepository staffRepository;
 
+    @Autowired
+    private edu.cit.dibdib.ClinicCare.model.UserFactory userFactory;
+
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
-        System.out.println("Registration attempt for email: " + user.getEmail());
-        if (userRepository.findByEmail(user.getEmail()).isPresent() || 
-            staffRepository.findByEmail(user.getEmail()).isPresent()) {
+    public ResponseEntity<?> registerUser(@RequestBody User userRequest) {
+        System.out.println("Registration attempt for email: " + userRequest.getEmail());
+        
+        // 1. Check if email exists in either table
+        if (userRepository.findByEmail(userRequest.getEmail()).isPresent() || 
+            staffRepository.findByEmail(userRequest.getEmail()).isPresent()) {
             return ResponseEntity.badRequest().body("Error: Email is already in use!");
         }
 
-        User savedUser = userRepository.save(user);
-        return ResponseEntity.ok(savedUser);
+        // 2. Use Factory Pattern to create the correct object
+        // For registration through this endpoint, we default to PATIENT 
+        // unless specified otherwise (in a real system, roles are sensitive)
+        edu.cit.dibdib.ClinicCare.model.BaseUser newUser = userFactory.createUser(userRequest.getRole());
+        
+        // Map data (A DTO or Mapper pattern would be better, but we'll stick to a simple copy for now)
+        if (newUser instanceof edu.cit.dibdib.ClinicCare.model.Staff staff) {
+            staff.setFullName(userRequest.getFullName());
+            staff.setEmail(userRequest.getEmail());
+            staff.setPassword(userRequest.getPassword());
+            return ResponseEntity.ok(staffRepository.save(staff));
+        } else {
+            edu.cit.dibdib.ClinicCare.model.User user = (edu.cit.dibdib.ClinicCare.model.User) newUser;
+            user.setFullName(userRequest.getFullName());
+            user.setEmail(userRequest.getEmail());
+            user.setPassword(userRequest.getPassword());
+            return ResponseEntity.ok(userRepository.save(user));
+        }
     }
 
     @PostMapping("/login")
