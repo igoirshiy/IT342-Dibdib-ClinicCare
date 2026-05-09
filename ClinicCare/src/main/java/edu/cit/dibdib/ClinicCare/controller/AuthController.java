@@ -42,12 +42,16 @@ public class AuthController {
             staff.setFullName(userRequest.getFullName());
             staff.setEmail(userRequest.getEmail());
             staff.setPassword(userRequest.getPassword());
+            staff.setAge(userRequest.getAge());
+            staff.setGender(userRequest.getGender());
             return ResponseEntity.ok(staffRepository.save(staff));
         } else {
             edu.cit.dibdib.ClinicCare.model.User user = (edu.cit.dibdib.ClinicCare.model.User) newUser;
             user.setFullName(userRequest.getFullName());
             user.setEmail(userRequest.getEmail());
             user.setPassword(userRequest.getPassword());
+            user.setAge(userRequest.getAge());
+            user.setGender(userRequest.getGender());
             return ResponseEntity.ok(userRepository.save(user));
         }
     }

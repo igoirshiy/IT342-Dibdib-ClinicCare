@@ -7,7 +7,9 @@ const Register = ({ onSwitchToLogin, onRegisterSuccess }) => {
         email: '',
         password: '',
         confirmPassword: '',
-        role: 'PATIENT'
+        role: 'PATIENT',
+        age: '',
+        gender: ''
     });
 
     const [errors, setErrors] = useState({});
@@ -49,7 +51,9 @@ const Register = ({ onSwitchToLogin, onRegisterSuccess }) => {
                         fullName: formData.fullName,
                         email: formData.email,
                         password: formData.password,
-                        role: formData.role
+                        role: formData.role,
+                        age: formData.age,
+                        gender: formData.gender
                     }),
                 });
 
@@ -109,6 +113,34 @@ const Register = ({ onSwitchToLogin, onRegisterSuccess }) => {
                                 className={errors.email ? 'input-error' : ''}
                             />
                             {errors.email && <span className="error-message">{errors.email}</span>}
+                        </div>
+
+                        <div className="form-fields-row">
+                            <div className="form-group flex-1">
+                                <label htmlFor="age">Age</label>
+                                <input
+                                    type="number"
+                                    id="age"
+                                    name="age"
+                                    placeholder="25"
+                                    value={formData.age}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className="form-group flex-1">
+                                <label htmlFor="gender">Gender</label>
+                                <select
+                                    id="gender"
+                                    name="gender"
+                                    value={formData.gender}
+                                    onChange={handleChange}
+                                >
+                                    <option value="" disabled>Select</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
                         </div>
 
                         <div className="form-fields-row">

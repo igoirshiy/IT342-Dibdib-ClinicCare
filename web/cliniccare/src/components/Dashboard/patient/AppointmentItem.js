@@ -1,34 +1,51 @@
 import React from 'react';
 import './AppointmentList.css';
+import { Stethoscope, Calendar, Clock, Tag } from 'lucide-react';
 
 const AppointmentItem = ({ appointment }) => {
-    const { doctor, date, time, type, status, queueNumber } = appointment;
+    // Backend field names: doctorName, consultationType, appointmentDate, timeSlot, status, queueNumber
+    const { doctorName, appointmentDate, timeSlot, consultationType, status, queueNumber } = appointment;
 
     const getStatusClass = (status) => {
+        if (!status) return '';
         switch (status.toLowerCase()) {
             case 'waiting': return 'status-waiting';
             case 'serving': return 'status-serving';
             case 'completed': return 'status-completed';
+            case 'cancelled': return 'status-cancelled';
             default: return '';
         }
     };
 
     return (
-        <div className="appointment-item-card glass-item">
+        <div className="appointment-item-card glass-item animate-fade-in">
             <div className="appointment-info">
                 <div className="appointment-main">
-                    <h4 className="doctor-name">{doctor}</h4>
-                    <span className="consultation-type">{type}</span>
+                    <div className="doctor-info-row">
+                        <Stethoscope size={18} className="item-icon" />
+                        <h4 className="doctor-name">Doc {doctorName}</h4>
+                    </div>
+                    <div className="type-info-row">
+                        <Tag size={14} className="item-icon-small" />
+                        <span className="consultation-type">{consultationType}</span>
+                    </div>
                 </div>
-                <div className="appointment-details">
-                    <p className="appointment-time">{date} | {time}</p>
+                <div className="appointment-details-grid">
+                    <div className="detail-item">
+                        <Calendar size={14} className="item-icon-small" />
+                        <span className="detail-text">{appointmentDate}</span>
+                    </div>
+                    <div className="detail-item">
+                        <Clock size={14} className="item-icon-small" />
+                        <span className="detail-text">{timeSlot}</span>
+                    </div>
                 </div>
             </div>
 
             <div className="appointment-status-group">
                 {queueNumber && (
                     <div className="queue-tag">
-                        <span className="queue-label">Queue</span>
+                        <span className="queue-label">No.</span>
                         <span className="queue-val">{queueNumber}</span>
                     </div>
                 )}

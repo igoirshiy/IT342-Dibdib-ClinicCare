@@ -31,13 +31,15 @@ public class ClinicCareApplication {
 					"password VARCHAR(255) NOT NULL" +
 					")");
 
-			// Add role column if it doesn't exist and update existing nulls
+			// Ensure all columns exist in users
 			try {
 				jdbcTemplate.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS role VARCHAR(255)");
+				jdbcTemplate.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS age INTEGER");
+				jdbcTemplate.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS gender VARCHAR(255)");
 				jdbcTemplate.execute("UPDATE users SET role = 'PATIENT' WHERE role IS NULL");
-				System.out.println("Role column check and update complete.");
+				System.out.println("Users table columns verified.");
 			} catch (Exception e) {
-				System.out.println("Info: Role column check/update skipped: " + e.getMessage());
+				System.out.println("Info: Users column update skipped: " + e.getMessage());
 			}
 
 			// Create staff table if not exists
@@ -50,9 +52,13 @@ public class ClinicCareApplication {
 						"password VARCHAR(255) NOT NULL, " +
 						"role VARCHAR(255) DEFAULT 'STAFF'" +
 						")");
+				
+				// Ensure all columns exist in staff
+				jdbcTemplate.execute("ALTER TABLE staff ADD COLUMN IF NOT EXISTS age INTEGER");
+				jdbcTemplate.execute("ALTER TABLE staff ADD COLUMN IF NOT EXISTS gender VARCHAR(255)");
 				System.out.println("Staff table ready.");
 			} catch (Exception e) {
-				System.out.println("Error creating staff table: " + e.getMessage());
+				System.out.println("Error creating/updating staff table: " + e.getMessage());
 			}
 
 			// Create appointments table if not exists
@@ -109,6 +115,19 @@ public class ClinicCareApplication {
 			}
 
 			System.out.println("Database setup complete!");
+
+			// Seed default admin if no staff exists
+			try {
+				Long count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM staff", Long.class);
+				if (count == 0) {
+					System.out.println("Seeding default admin...");
+					jdbcTemplate.execute("INSERT INTO staff (full_name, email, password, role) " +
+							"VALUES ('Administrator', 'admin@cliniccare.com', 'admin123', 'STAFF')");
+					System.out.println("Default admin created: admin@cliniccare.com / admin123");
+				}
+			} catch (Exception e) {
+				System.out.println("Error seeding admin: " + e.getMessage());
+			}
 		};
 	}
 }

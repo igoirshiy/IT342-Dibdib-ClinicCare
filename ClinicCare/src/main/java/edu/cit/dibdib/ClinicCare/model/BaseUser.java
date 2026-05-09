@@ -7,4 +7,9 @@ public interface BaseUser {
     String getPassword();
     String getRole();
     void setRole(String role);
+    
+    Integer getAge();
+    void setAge(Integer age);
+    String getGender();
+    void setGender(String gender);
 }

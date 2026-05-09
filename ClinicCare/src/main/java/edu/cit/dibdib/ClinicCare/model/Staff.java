@@ -25,6 +25,12 @@ public class Staff implements BaseUser {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = true)
+    private Integer age;
+
+    @Column(nullable = true)
+    private String gender;
+
     @Column(nullable = false)
     private String role = "STAFF"; // Always STAFF for this table
 }

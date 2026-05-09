@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { X, Calendar, User, ChevronDown } from 'lucide-react';
 import './BookingModal.css';
+import CustomCalendar from './CustomCalendar';
 
-const BookingModal = ({ isOpen, onClose, user }) => {
+const BookingModal = ({ isOpen, onClose, user, onSuccess }) => {
     const [formData, setFormData] = useState({
         type: '',
         date: '',
@@ -15,15 +16,27 @@ const BookingModal = ({ isOpen, onClose, user }) => {
     const [allSlots, setAllSlots] = useState([]);
     const [availableSlots, setAvailableSlots] = useState([]);
     const [isLoadingSlots, setIsLoadingSlots] = useState(false);
+    const [userAppointments, setUserAppointments] = useState([]);
 
     useEffect(() => {
         if (isOpen) {
             fetchAllSlots();
-            // Auto-refresh slots every 5 seconds while modal is open
-            const interval = setInterval(fetchAllSlots, 5000);
-            return () => clearInterval(interval);
+            fetchUserAppointments();
         }
     }, [isOpen]);
+
+    const fetchUserAppointments = async () => {
+        if (!user?.email) return;
+        try {
+            const response = await fetch(`http://127.0.0.1:8080/api/appointments/patient/${user.email}`);
+            if (response.ok) {
+                const data = await response.json();
+                setUserAppointments(data);
+            }
+        } catch (error) {
+            console.error("Error fetching user appointments for calendar:", error);
+        }
+    };
 
     const fetchAllSlots = async () => {
         setIsLoadingSlots(true);
@@ -124,6 +137,7 @@ const BookingModal = ({ isOpen, onClose, user }) => {
             if (response.ok) {
                 const data = await response.json();
                 alert(`Successfully booked! Your Queue Number is: ${data.queueNumber}`);
+                if (onSuccess) onSuccess();
                 onClose();
             } else {
                 const errorText = await response.text();
@@ -192,39 +206,40 @@ const BookingModal = ({ isOpen, onClose, user }) => {
                         <p className="field-note">Consultation type helps the clinic prepare for your visit.</p>
                     </div>
 
-                    <div className="form-row">
-                        <div className="form-group flex-1">
-                            <label>Appointment Date</label>
-                            <div className="input-wrapper">
-                                <input
-                                    type="date"
-                                    min={today}
-                                    max={maxDate}
-                                    value={formData.date}
-                                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                                />
-                                <Calendar size={18} className="input-icon" />
-                            </div>
-                            <p className="field-note">Available within the next 7 days.</p>
+                    <div className="form-group">
+                        <label>Select Doctor</label>
+                        <div className="select-wrapper">
+                            <select
+                                value={formData.doctor}
+                                onChange={(e) => {
+                                    setFormData({ ...formData, doctor: e.target.value, date: '', timeSlot: '', selectedSlotId: null });
+                                }}
+                            >
+                                <option value="" disabled>Select Doctor</option>
+                                {[...new Set(allSlots.filter(s => !s.disabled).map(s => s.doctor))].map(d => (
+                                    <option key={d} value={d}>Doc {d}</option>
+                                ))}
+                            </select>
+                            <User size={18} className="select-icon" />
                         </div>
+                    </div>
 
-                        <div className="form-group flex-1">
-                            <label>Select Doctor</label>
-                            <div className="select-wrapper">
-                                <select
-                                    value={formData.doctor}
-                                    onChange={(e) => setFormData({ ...formData, doctor: e.target.value })}
-                                >
-                                    <option value="" disabled>Select Doctor</option>
-                                    {availableDoctors.length === 0 ? (
-                                        <option disabled>No doctors available</option>
-                                    ) : (
-                                        availableDoctors.map(d => <option key={d} value={d}>Doc {d}</option>)
-                                    )}
-                                </select>
-                                <User size={18} className="select-icon" />
+                    <div className="form-group">
+                        <label>Appointment Date</label>
+                        {!formData.doctor ? (
+                            <div style={{ textAlign: 'center', padding: '20px', background: '#f8fafc', borderRadius: '12px', border: '1px dashed #cbd5e1' }}>
+                                <Calendar size={24} style={{ color: '#94a3b8', marginBottom: '8px' }} />
+                                <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Please select a doctor first to see their available dates.</p>
                             </div>
-                        </div>
+                        ) : (
+                            <CustomCalendar 
+                                selectedDate={formData.date}
+                                onDateSelect={(date) => setFormData({ ...formData, date, timeSlot: '', selectedSlotId: null })}
+                                userAppointments={userAppointments}
+                                availableDates={[...new Set(allSlots.filter(s => s.doctor === formData.doctor && !s.disabled).map(s => s.date))]}
+                            />
+                        )}
+                        <p className="field-note">Green dates indicate the doctor is available.</p>
                     </div>
 
                     <div className="form-group">
@@ -256,7 +271,7 @@ const BookingModal = ({ isOpen, onClose, user }) => {
                                         >
                                             <span className="slot-time">{timeRange}</span>
                                             <span className="slot-capacity">
-                                                {isFull ? 'FULL' : `${left} slots left`}
+                                                {isFull ? 'FULL' : `Available: ${left} / ${slot.capacity}`}
                                             </span>
                                         </button>
                                     );

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./DashboardCards.css";
 import { Calendar, Clock, Users, CalendarPlus, CalendarCheck } from "lucide-react";
 
-const DashboardCards = ({ onBookClick, user }) => {
+const DashboardCards = ({ onBookClick, user, refreshTrigger }) => {
     const [appointments, setAppointments] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -24,7 +24,7 @@ const DashboardCards = ({ onBookClick, user }) => {
 
     useEffect(() => {
         fetchUserAppointments();
-    }, [user]);
+    }, [user, refreshTrigger]);
 
     const latest = appointments.find(a => a.status !== "Completed" && a.status !== "Cancelled") || appointments[0];
 
