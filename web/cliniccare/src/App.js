@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './App.css';
-import Register from './components/Register/Register';
-import Login from './components/Login/Login';
-import Dashboard from './components/Dashboard/patient/Dashboard';
+import Register from './features/auth/Register';
+import Login from './features/auth/Login';
+import Dashboard from './features/dashboard/Dashboard';
 
 function App() {
   // view can be 'login', 'register', or 'dashboard'

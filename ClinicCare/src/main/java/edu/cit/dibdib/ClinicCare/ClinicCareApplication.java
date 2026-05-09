@@ -1,9 +1,9 @@
 package edu.cit.dibdib.ClinicCare;
 
-import edu.cit.dibdib.ClinicCare.model.Staff;
-import edu.cit.dibdib.ClinicCare.model.User;
-import edu.cit.dibdib.ClinicCare.repository.StaffRepository;
-import edu.cit.dibdib.ClinicCare.repository.UserRepository;
+import edu.cit.dibdib.ClinicCare.features.users.Staff;
+import edu.cit.dibdib.ClinicCare.features.users.User;
+import edu.cit.dibdib.ClinicCare.features.users.StaffRepository;
+import edu.cit.dibdib.ClinicCare.features.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
