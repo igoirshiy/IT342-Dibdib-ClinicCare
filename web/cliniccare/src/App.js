@@ -16,7 +16,6 @@ function App() {
   };
   const handleRegister = (userData) => {
     console.log("Registered user:", userData);
-    alert('Registration Successful!');
     setUser(userData);
     setView('dashboard');
   };

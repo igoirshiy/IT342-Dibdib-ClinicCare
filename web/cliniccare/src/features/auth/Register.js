@@ -62,7 +62,6 @@ const Register = ({ onSwitchToLogin, onRegisterSuccess }) => {
                     if (onRegisterSuccess) {
                         onRegisterSuccess(userData);
                     } else {
-                        alert('Registration Successful!');
                         onSwitchToLogin();
                     }
                 } else {

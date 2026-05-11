@@ -68,7 +68,7 @@ const StaffAppointmentList = () => {
   };
 
   const notifyPatient = (patient) => {
-    alert(`📩 Notification sent to ${patient}: Your appointment has been updated.`);
+    // Notification logic would go here
   };
 
   const toggleDoctorExpand = (doctorName) => {

@@ -7,6 +7,7 @@ import edu.cit.dibdib.ClinicCare.features.appointments.SlotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,11 +28,13 @@ public class SlotController {
     }
 
     @PostMapping
+    @Transactional
     public Slot createSlot(@RequestBody Slot slot) {
         return slotRepository.save(slot);
     }
 
     @PostMapping("/batch")
+    @Transactional
     public List<Slot> createSlotsBatch(@RequestBody List<Slot> slots) {
         if (!slots.isEmpty()) {
             String doctorName = slots.get(0).getDoctor();
@@ -46,6 +49,7 @@ public class SlotController {
     }
 
     @PutMapping("/{id}")
+    @Transactional
     public ResponseEntity<Slot> updateSlot(@PathVariable Long id, @RequestBody Slot slotDetails) {
         return slotRepository.findById(id)
                 .map(slot -> {
@@ -62,6 +66,7 @@ public class SlotController {
     }
 
     @DeleteMapping("/{id}")
+    @Transactional
     public ResponseEntity<Void> deleteSlot(@PathVariable Long id) {
         return slotRepository.findById(id)
                 .map(slot -> {

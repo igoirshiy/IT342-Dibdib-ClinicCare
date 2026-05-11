@@ -1,0 +1,182 @@
+.health-checklist-card.design-ref {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  font-family: 'Inter', sans-serif;
+  color: #333;
+}
+
+.checklist-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 500;
+  margin: 0;
+}
+
+.progress-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.main-progress-bar {
+  width: 100%;
+  height: 12px;
+  background: #f0f0f0;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #8e1f54; /* Dark pink/purple as seen in image */
+  border-radius: 10px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.checklist-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.task-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #ffffff;
+  border: 1px solid #f0f0f0;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s ease;
+}
+
+.task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.task-card.completed {
+  background: #fafafa;
+}
+
+.task-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bg-water { background-color: #e0f2fe; }
+.bg-walk { background-color: #dcfce7; }
+.bg-vitamins { background-color: #fef3c7; }
+.bg-stretch { background-color: #f3e8ff; }
+.bg-sleep { background-color: #e0e7ff; }
+.bg-activity { background-color: #f1f5f9; }
+
+.task-name {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.check-action-btn {
+  background: linear-gradient(90deg, #db2777, #9333ea);
+  color: white;
+  border: none;
+  padding: 8px 24px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(219, 39, 119, 0.2);
+}
+
+.check-action-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 14px rgba(219, 39, 119, 0.3);
+}
+
+.check-action-btn.is-done {
+  background: #10b981;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+}
+
+.checklist-footer {
+  display: flex;
+  justify-content: center;
+}
+
+.edit-mode-btn {
+  background: transparent;
+  border: 1px dashed #ccc;
+  color: #666;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.edit-form {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.edit-form input {
+  flex: 1;
+  padding: 10px 16px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  outline: none;
+}
+
+.add-btn {
+  background: #8e1f54;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.close-edit {
+  background: #f1f5f9;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.remove-btn {
+  background: #fff1f2;
+  border: none;
+  color: #f43f5e;
+  padding: 8px;
+  border-radius: 10px;
+  cursor: pointer;
+}

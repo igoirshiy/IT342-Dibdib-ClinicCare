@@ -7,6 +7,7 @@ import edu.cit.dibdib.ClinicCare.features.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -23,6 +24,7 @@ public class AuthController {
     private edu.cit.dibdib.ClinicCare.features.users.UserFactory userFactory;
 
     @PostMapping("/register")
+    @Transactional
     public ResponseEntity<?> registerUser(@RequestBody User userRequest) {
         System.out.println("Registration attempt for email: " + userRequest.getEmail());
         
@@ -57,6 +59,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @Transactional(readOnly = true)
     public ResponseEntity<?> loginUser(@RequestBody User loginRequest) {
         System.out.println("Login attempt for email: " + loginRequest.getEmail());
 

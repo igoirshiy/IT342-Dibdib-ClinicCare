@@ -25,11 +25,13 @@ public class AppointmentController {
     private edu.cit.dibdib.ClinicCare.features.notifications.NotificationAdapter notificationAdapter;
 
     @GetMapping("/patient/{email}")
+    @Transactional(readOnly = true)
     public List<Appointment> getPatientAppointments(@PathVariable String email) {
         return appointmentRepository.findByPatientEmail(email);
     }
 
     @GetMapping("/all")
+    @Transactional(readOnly = true)
     public List<Appointment> getAllAppointments() {
         System.out.println("Fetching ALL appointments...");
         List<Appointment> all = appointmentRepository.findAll();
@@ -38,6 +40,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/today")
+    @Transactional(readOnly = true)
     public List<Appointment> getTodayAppointments() {
         LocalDate today = LocalDate.now();
         System.out.println("Fetching appointments for today: " + today);
@@ -47,6 +50,7 @@ public class AppointmentController {
     }
 
     @PostMapping("/book")
+    @Transactional
     public ResponseEntity<?> bookAppointment(@RequestBody Appointment appointment) {
         System.out.println("Booking via Facade: " + appointment);
         try {
@@ -59,6 +63,7 @@ public class AppointmentController {
     }
 
     @PutMapping("/{id}/status")
+    @Transactional
     public ResponseEntity<?> updateStatus(@PathVariable Long id, @RequestBody String status) {
         return appointmentRepository.findById(id)
                 .map(app -> {

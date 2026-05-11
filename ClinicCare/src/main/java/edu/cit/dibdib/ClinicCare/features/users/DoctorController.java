@@ -8,6 +8,7 @@ import edu.cit.dibdib.ClinicCare.features.appointments.SlotRepository;
 import edu.cit.dibdib.ClinicCare.features.appointments.AppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -33,6 +34,7 @@ public class DoctorController {
     }
 
     @PostMapping("/sync")
+    @Transactional
     public String syncLegacyDoctors() {
         // 1. Get all unique doctor names from Slots
         Set<String> doctorNames = slotRepository.findAll().stream()

@@ -136,7 +136,6 @@ const BookingModal = ({ isOpen, onClose, user, onSuccess }) => {
 
             if (response.ok) {
                 const data = await response.json();
-                alert(`Successfully booked! Your Queue Number is: ${data.queueNumber}`);
                 if (onSuccess) onSuccess();
                 onClose();
             } else {

@@ -81,7 +81,6 @@ const SlotManager = () => {
       if (response.ok) {
         setSlots(prev => prev.map(s => s.id === id ? { ...s, startTime: editStart, endTime: editEnd } : s));
         setEditingId(null);
-        alert("✅ Slot updated successfully!");
       }
     } catch (e) {
       console.error("Error updating slot:", e);
@@ -121,7 +120,6 @@ const SlotManager = () => {
 
       if (response.ok) {
         setSlots(prev => prev.filter(s => s.id !== id));
-        alert("🗑️ Slot deleted.");
       }
     } catch (e) {
       console.error("Error deleting slot:", e);
@@ -194,7 +192,6 @@ const SlotManager = () => {
           endDate: getLocalDateString(new Date()),
           timeBlocks: [{ startTime: "08:00", endTime: "12:00", capacity: 8 }],
         });
-        alert(`✅ ${savedSlots.length} schedules added successfully!`);
       }
     } catch (e) {
       console.error("Error adding batch slots:", e);

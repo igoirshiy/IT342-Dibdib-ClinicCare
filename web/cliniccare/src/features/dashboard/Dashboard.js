@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Sidebar from './Sidebar';
 import Header from './Header';
 import DashboardCards from './DashboardCards';
-import NotificationCenter from './NotificationCenter';
+import HealthChecklist from './HealthChecklist';
 import StaffDashboard from './StaffDashboard';
 import BookingModal from '../appointments/BookingModal';
 import BookingView from '../appointments/BookingView';
@@ -42,7 +42,7 @@ const Dashboard = ({ onLogout, userRole, user }) => {
                             user={user} 
                             refreshTrigger={refreshTrigger}
                         />
-                        <NotificationCenter />
+                        <HealthChecklist user={user} />
                     </>
                 );
             case 'book':
