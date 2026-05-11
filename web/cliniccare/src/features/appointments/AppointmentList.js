@@ -52,8 +52,11 @@ const AppointmentList = ({ user, refreshTrigger }) => {
         if (searchQuery) {
             const query = searchQuery.toLowerCase();
             filtered = filtered.filter(app => 
-                app.doctorName.toLowerCase().includes(query) || 
-                app.consultationType.toLowerCase().includes(query)
+                (app.doctorName?.toLowerCase().includes(query)) || 
+                (app.consultationType?.toLowerCase().includes(query)) ||
+                (app.appointmentDate?.toLowerCase().includes(query)) ||
+                (app.queueNumber?.toLowerCase().includes(query)) ||
+                (app.status?.toLowerCase().includes(query))
             );
         }
 
@@ -80,18 +83,24 @@ const AppointmentList = ({ user, refreshTrigger }) => {
                 </div>
                 <div className="header-stats">
                     <div className="stat-pill">
+                        <span className="stat-label">Upcoming</span>
+                        <span className="stat-value">
+                            {appointments.filter(a => a.status === 'Waiting' || a.status === 'Serving').length}
+                        </span>
+                    </div>
+                    <div className="stat-pill">
                         <span className="stat-label">Total</span>
                         <span className="stat-value">{appointments.length}</span>
                     </div>
                 </div>
             </header>
 
-            <div className="view-controls glass-card">
+            <div className="view-controls">
                 <div className="search-bar">
-                    <Search size={18} />
+                    <Search size={18} color="#94a3b8" />
                     <input 
                         type="text" 
-                        placeholder="Search by doctor or type..." 
+                        placeholder="Search doctor or type..." 
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
@@ -111,10 +120,12 @@ const AppointmentList = ({ user, refreshTrigger }) => {
 
             <div className="appointments-grid">
                 {filteredAppointments.length === 0 ? (
-                    <div className="empty-state glass-card">
-                        <CalendarOff size={64} />
+                    <div className="empty-state">
+                        <div className="empty-icon-wrapper">
+                            <CalendarOff size={48} color="#cbd5e1" />
+                        </div>
                         <h3>No appointments found</h3>
-                        <p>Adjust your filters or book a new appointment to get started.</p>
+                        <p>We couldn't find any appointments matching your current filters.</p>
                     </div>
                 ) : (
                     filteredAppointments.map(app => (

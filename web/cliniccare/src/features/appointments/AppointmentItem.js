@@ -17,12 +17,17 @@ const AppointmentItem = ({ appointment }) => {
         }
     };
 
+    const formatDate = (dateStr) => {
+        const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+        return new Date(dateStr).toLocaleDateString(undefined, options);
+    };
+
     return (
-        <div className="appointment-item-card glass-item animate-fade-in">
+        <div className="appointment-item-card animate-fade-in">
             <div className="appointment-info">
                 <div className="appointment-main">
                     <div className="doctor-info-row">
-                        <Stethoscope size={18} className="item-icon" />
+                        <Stethoscope size={22} className="item-icon" />
                         <h4 className="doctor-name">Doc {doctorName}</h4>
                     </div>
                     <div className="type-info-row">
@@ -30,14 +35,15 @@ const AppointmentItem = ({ appointment }) => {
                         <span className="consultation-type">{consultationType}</span>
                     </div>
                 </div>
+                
                 <div className="appointment-details-grid">
                     <div className="detail-item">
-                        <Calendar size={14} className="item-icon-small" />
-                        <span className="detail-text">{appointmentDate}</span>
+                        <Calendar size={16} className="item-icon-small" />
+                        <span>{formatDate(appointmentDate)}</span>
                     </div>
                     <div className="detail-item">
-                        <Clock size={14} className="item-icon-small" />
-                        <span className="detail-text">{timeSlot}</span>
+                        <Clock size={16} className="item-icon-small" />
+                        <span>{timeSlot}</span>
                     </div>
                 </div>
             </div>

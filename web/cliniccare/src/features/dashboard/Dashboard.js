@@ -39,6 +39,7 @@ const Dashboard = ({ onLogout, userRole, user }) => {
                     <>
                         <DashboardCards 
                             onBookClick={() => setIsBookingOpen(true)} 
+                            onViewAppointmentsClick={() => setActiveKey('appointments')}
                             user={user} 
                             refreshTrigger={refreshTrigger}
                         />

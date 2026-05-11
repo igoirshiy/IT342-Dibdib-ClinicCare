@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import './DashboardCards.css';
 import { Calendar, Clock, Users, CalendarPlus, CalendarCheck } from "lucide-react";
 
-const DashboardCards = ({ onBookClick, user, refreshTrigger }) => {
+const DashboardCards = ({ onBookClick, onViewAppointmentsClick, user, refreshTrigger }) => {
     const [appointments, setAppointments] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -31,7 +31,7 @@ const DashboardCards = ({ onBookClick, user, refreshTrigger }) => {
     return (
         <div className="dashboard-cards">
             {/* Upcoming Appointment */}
-            <div className="glass-card">
+            <div className="glass-card" onClick={onViewAppointmentsClick} style={{ cursor: 'pointer' }}>
                 <div className="card-header">
                     <Calendar size={22} />
                     <h3>Upcoming Appointment</h3>
@@ -63,7 +63,7 @@ const DashboardCards = ({ onBookClick, user, refreshTrigger }) => {
             </div>
 
             {/* Queue Status */}
-            <div className="glass-card">
+            <div className="glass-card" onClick={onViewAppointmentsClick} style={{ cursor: 'pointer' }}>
                 <div className="card-header">
                     <Users size={22} />
                     <h3>Queue Status</h3>
@@ -102,7 +102,7 @@ const DashboardCards = ({ onBookClick, user, refreshTrigger }) => {
                         <CalendarPlus size={18} />
                         Book New Appointment
                     </button>
-                    <button className="action-btn action-btn--secondary">
+                    <button className="action-btn action-btn--secondary" onClick={onViewAppointmentsClick}>
                         <CalendarCheck size={18} />
                         View My Appointments
                     </button>
