@@ -30,8 +30,10 @@ const CustomCalendar = ({ selectedDate, onDateSelect, userAppointments, availabl
 
     const handleDateClick = (day, isSelectable) => {
         if (!isSelectable) return;
-        const date = new Date(viewDate.getFullYear(), viewDate.getMonth(), day);
-        const dateString = date.toISOString().split('T')[0];
+        const year = viewDate.getFullYear();
+        const month = String(viewDate.getMonth() + 1).padStart(2, '0');
+        const dayStr = String(day).padStart(2, '0');
+        const dateString = `${year}-${month}-${dayStr}`;
         onDateSelect(dateString);
     };
 
@@ -48,7 +50,9 @@ const CustomCalendar = ({ selectedDate, onDateSelect, userAppointments, availabl
 
         for (let d = 1; d <= daysCount; d++) {
             const date = new Date(year, month, d);
-            const dateString = date.toISOString().split('T')[0];
+            const mStr = String(month + 1).padStart(2, '0');
+            const dStr = String(d).padStart(2, '0');
+            const dateString = `${year}-${mStr}-${dStr}`;
             const isToday = date.getTime() === today.getTime();
             const isSelected = selectedDate === dateString;
             const isBookedByMe = bookedDates.has(dateString);

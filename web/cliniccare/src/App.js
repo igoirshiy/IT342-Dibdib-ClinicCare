@@ -40,6 +40,7 @@ function App() {
           onLogout={handleLogout}
           userRole={user?.role || 'PATIENT'}
           user={user}
+          onUserUpdate={setUser}
         />
       )}
     </div>

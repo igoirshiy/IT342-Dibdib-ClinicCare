@@ -10,6 +10,7 @@ import {
     X,
     Activity,
     Stethoscope,
+    UserCircle
 } from "lucide-react";
 
 const navItems = [
@@ -18,6 +19,7 @@ const navItems = [
     { icon: CalendarCheck, label: "My Appointments", key: "appointments" },
     { icon: Users, label: "Queue Status", key: "queue" },
     { icon: Stethoscope, label: "Staff View", key: "staff" },
+    { icon: UserCircle, label: "Profile Settings", key: "profile" },
 ];
 
 const Sidebar = ({ activeKey, onNavigate, onLogout, userRole }) => {

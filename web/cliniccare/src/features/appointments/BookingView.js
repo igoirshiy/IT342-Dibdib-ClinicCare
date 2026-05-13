@@ -167,7 +167,7 @@ const BookingView = ({ user, onBookingSuccess }) => {
 
     if (successData) {
         return (
-            <div className="glass-card animate-fade-in" style={{ padding: '40px', textAlign: 'center', maxWidth: '600px', margin: '0 auto' }}>
+            <div className="glass-card animate-fade-in" style={{ padding: '40px', textAlign: 'center', width: '100%' }}>
                 <div style={{ background: '#ec4899', width: '64px', height: '64px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', color: 'white' }}>
                     <Activity size={32} />
                 </div>
@@ -200,14 +200,13 @@ const BookingView = ({ user, onBookingSuccess }) => {
     }
 
     return (
-        <div className="glass-card animate-fade-in" style={{ maxWidth: '800px', margin: '0 auto' }}>
+        <div className="glass-card animate-fade-in" style={{ width: '100%' }}>
             <div className="modal-header" style={{ padding: '32px 32px 0' }}>
                 <div className="modal-header-text">
                     <h2>Book New Appointment</h2>
                     <p>Select your preferred doctor and time slot</p>
                 </div>
             </div>
-
             <form className="modal-form" onSubmit={handleSubmit} style={{ padding: '32px' }}>
                 <div className="form-group">
                     <label>Consultation Type</label>

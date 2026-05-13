@@ -1,19 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Bell } from "lucide-react";
+import NotificationCenter from "./NotificationCenter";
 import './Header.css';
 
 const StaffHeader = () => {
   return (
-    <header className="header">
+    <header className="header" style={{ position: 'relative' }}>
       <div className="header-welcome">
         <h2>Staff Dashboard</h2>
         <p className="header-subtitle">Manage appointments & schedules</p>
       </div>
       <div className="header-actions">
-        <button className="header-notification" aria-label="Notifications">
-          <Bell size={20} />
-          <span className="header-notification-badge">5</span>
-        </button>
         <div className="header-avatar">
           <span>S</span>
         </div>

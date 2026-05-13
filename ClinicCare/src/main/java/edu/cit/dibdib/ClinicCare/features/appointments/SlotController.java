@@ -18,13 +18,44 @@ public class SlotController {
 
     @Autowired
     private SlotRepository slotRepository;
+    
+    @Autowired
+    private AppointmentRepository appointmentRepository;
 
     @Autowired
     private DoctorRepository doctorRepository;
 
     @GetMapping
     public List<Slot> getAllSlots() {
-        return slotRepository.findAll();
+        List<Slot> slots = slotRepository.findAll();
+        // Dynamic correction: Update booked count based on real non-cancelled appointments
+        for (Slot slot : slots) {
+            try {
+                java.time.LocalDate date = java.time.LocalDate.parse(slot.getDate());
+                String timeRange = formatSlotTime(slot.getStartTime()) + " – " + formatSlotTime(slot.getEndTime());
+                long count = appointmentRepository.countActiveAppointments(slot.getDoctor(), date, timeRange);
+                slot.setBooked((int)count);
+            } catch (Exception e) {
+                // Skip if date format is invalid or other error
+                System.out.println("Error calculating booked count for slot: " + e.getMessage());
+            }
+        }
+        return slots;
+    }
+
+    private String formatSlotTime(String t) {
+        if (t == null || !t.contains(":")) return t;
+        try {
+            String[] parts = t.split(":");
+            int h = Integer.parseInt(parts[0]);
+            int m = Integer.parseInt(parts[1]);
+            String ampm = h >= 12 ? "PM" : "AM";
+            int hr = h % 12;
+            if (hr == 0) hr = 12;
+            return hr + ":" + String.format("%02d", m) + " " + ampm;
+        } catch (Exception e) {
+            return t;
+        }
     }
 
     @PostMapping

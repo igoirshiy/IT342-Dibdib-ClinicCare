@@ -41,7 +41,7 @@ const QueueView = ({ user, refreshTrigger }) => {
     }
 
     return (
-        <div className="queue-view-container" style={{ maxWidth: '600px', margin: '0 auto' }}>
+        <div className="queue-view-container" style={{ width: '100%' }}>
             <div className="glass-card" style={{ padding: '40px', textAlign: 'center' }}>
                 <div className="card-header" style={{ justifyContent: 'center', marginBottom: '32px' }}>
                     <Users size={28} style={{ color: '#ec4899' }} />

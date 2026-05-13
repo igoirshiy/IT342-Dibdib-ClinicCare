@@ -4,14 +4,16 @@ import Header from './Header';
 import DashboardCards from './DashboardCards';
 import HealthChecklist from './HealthChecklist';
 import StaffDashboard from './StaffDashboard';
+import StaffDashboardCards from './StaffDashboardCards';
 import BookingModal from '../appointments/BookingModal';
 import BookingView from '../appointments/BookingView';
 import AppointmentList from '../appointments/AppointmentList';
 import QueueView from '../appointments/QueueView';
+import ProfileView from './ProfileView';
 import './Dashboard.css';
 
-const Dashboard = ({ onLogout, userRole, user }) => {
-    const [activeKey, setActiveKey] = useState(userRole === 'STAFF' ? 'staff' : 'dashboard');
+const Dashboard = ({ onLogout, userRole, user, onUserUpdate }) => {
+    const [activeKey, setActiveKey] = useState('dashboard');
     const [isBookingOpen, setIsBookingOpen] = useState(false);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
 
@@ -19,17 +21,30 @@ const Dashboard = ({ onLogout, userRole, user }) => {
         setRefreshTrigger(prev => prev + 1);
     };
 
+    const handleUserUpdate = (updatedUser) => {
+        if (onUserUpdate) onUserUpdate(updatedUser);
+    };
+
     const renderContent = () => {
+        if (activeKey === 'profile') {
+            return <ProfileView user={user} onUpdate={handleUserUpdate} />;
+        }
+
         if (userRole === 'STAFF') {
             if (activeKey === 'staff') return <StaffDashboard />;
-            return (
-                <div className="glass-card" style={{ padding: '40px', textAlign: 'center' }}>
-                    <h3>Welcome, Staff</h3>
-                    <p style={{ marginTop: '20px', color: '#64748b' }}>
-                        Please use the Sidebar to navigate to the Staff View.
-                    </p>
-                </div>
-            );
+            if (activeKey === 'dashboard') {
+                return (
+                    <div className="staff-overview">
+                        <StaffDashboardCards refreshTrigger={refreshTrigger} />
+                        <div className="glass-card" style={{ padding: '30px' }}>
+                            <h3>Recent Activity</h3>
+                            <p style={{ marginTop: '15px', color: '#64748b', fontSize: '0.9rem' }}>
+                                Activity logs and recent updates will appear here.
+                            </p>
+                        </div>
+                    </div>
+                );
+            }
         }
 
         // Patient Views
@@ -73,7 +88,7 @@ const Dashboard = ({ onLogout, userRole, user }) => {
                 userRole={userRole}
             />
             <main className="dashboard-main">
-                {activeKey !== "staff" && <Header user={user} />}
+                {activeKey !== "staff" && <Header user={user} userRole={userRole} onNavigate={setActiveKey} />}
                 <div className="dashboard-content">
                     {renderContent()}
                 </div>

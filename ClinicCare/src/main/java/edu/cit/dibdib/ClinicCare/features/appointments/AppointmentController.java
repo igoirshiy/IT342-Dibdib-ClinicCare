@@ -22,6 +22,12 @@ public class AppointmentController {
     private BookingFacade bookingFacade;
 
     @Autowired
+    private edu.cit.dibdib.ClinicCare.features.users.UserRepository userRepository;
+
+    @Autowired
+    private SlotRepository slotRepository;
+
+    @Autowired
     private edu.cit.dibdib.ClinicCare.features.notifications.NotificationAdapter notificationAdapter;
 
     @GetMapping("/patient/{email}")
@@ -47,6 +53,24 @@ public class AppointmentController {
         List<Appointment> apps = appointmentRepository.findByAppointmentDateOrderByTimeSlotAsc(today);
         System.out.println("Found " + apps.size() + " appointments.");
         return apps;
+    }
+
+    @GetMapping("/stats")
+    @Transactional(readOnly = true)
+    public DashboardStats getDashboardStats() {
+        LocalDate today = LocalDate.now();
+        DashboardStats stats = new DashboardStats();
+        
+        stats.setTotalToday(appointmentRepository.countByAppointmentDate(today));
+        stats.setWaitingToday(appointmentRepository.countByAppointmentDateAndStatus(today, "Waiting"));
+        stats.setServingToday(appointmentRepository.countByAppointmentDateAndStatus(today, "Serving"));
+        stats.setCompletedToday(appointmentRepository.countByAppointmentDateAndStatus(today, "Completed"));
+        stats.setCancelledToday(appointmentRepository.countByAppointmentDateAndStatus(today, "Cancelled"));
+        
+        stats.setTotalPatients(userRepository.count());
+        stats.setActiveSlots(slotRepository.count());
+        
+        return stats;
     }
 
     @PostMapping("/book")

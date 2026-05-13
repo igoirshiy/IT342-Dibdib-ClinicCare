@@ -1,0 +1,61 @@
+.staff-dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.staff-stat-card {
+    display: flex;
+    align-items: center;
+    padding: 24px;
+    gap: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.staff-stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+}
+
+.stat-card-info h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary-color, #1a3a5c);
+    margin: 0;
+    line-height: 1;
+}
+
+.stat-card-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #475569;
+    margin: 4px 0 2px 0;
+}
+
+.stat-card-label {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .staff-dashboard-cards {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .staff-dashboard-cards {
+        grid-template-columns: 1fr;
+    }
+}
