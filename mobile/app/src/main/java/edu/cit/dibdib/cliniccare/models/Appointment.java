@@ -11,6 +11,7 @@ public class Appointment {
     private String reason;
     private String status;
     private String queueNumber;
+    private Long selectedSlotId; // Important for backend capacity calculation
 
     // Getters
     public Long getId() { return id; }
@@ -23,6 +24,7 @@ public class Appointment {
     public String getReason() { return reason; }
     public String getStatus() { return status; }
     public String getQueueNumber() { return queueNumber; }
+    public Long getSelectedSlotId() { return selectedSlotId; }
 
     // Setters
     public void setId(Long id) { this.id = id; }
@@ -35,4 +37,5 @@ public class Appointment {
     public void setReason(String reason) { this.reason = reason; }
     public void setStatus(String status) { this.status = status; }
     public void setQueueNumber(String queueNumber) { this.queueNumber = queueNumber; }
+    public void setSelectedSlotId(Long selectedSlotId) { this.selectedSlotId = selectedSlotId; }
 }
