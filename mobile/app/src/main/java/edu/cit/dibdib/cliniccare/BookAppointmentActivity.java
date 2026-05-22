@@ -1,8 +1,9 @@
 package edu.cit.dibdib.cliniccare;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,11 +18,18 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
+
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.MaterialDatePicker;
 
 import edu.cit.dibdib.cliniccare.models.Appointment;
 import edu.cit.dibdib.cliniccare.models.Slot;
@@ -134,6 +142,24 @@ public class BookAppointmentActivity extends AppCompatActivity {
         spinnerDoctors.setAdapter(adapter);
     }
 
+    private Set<Long> getAvailableDateTimestamps(String doctor) {
+        Set<Long> timestamps = new HashSet<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC")); // MaterialDatePicker operates in UTC
+        
+        for (Slot s : allSlots) {
+            if (!s.isDisabled() && s.getDoctor().equals(doctor)) {
+                try {
+                    long time = sdf.parse(s.getDate()).getTime();
+                    timestamps.add(time);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return timestamps;
+    }
+
     private void showDatePicker() {
         if (spinnerDoctors.getSelectedItem() == null) {
             Toast.makeText(this, "Please select a doctor first", Toast.LENGTH_SHORT).show();
@@ -141,21 +167,30 @@ public class BookAppointmentActivity extends AppCompatActivity {
         }
 
         String doctor = spinnerDoctors.getSelectedItem().toString();
-        
-        Calendar cal = Calendar.getInstance();
-        DatePickerDialog dialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
-            String m = String.format("%02d", month + 1);
-            String d = String.format("%02d", dayOfMonth);
-            selectedDate = year + "-" + m + "-" + d;
+        Set<Long> availableDates = getAvailableDateTimestamps(doctor);
+
+        if (availableDates.isEmpty()) {
+            Toast.makeText(this, "This doctor has no available schedules.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder();
+        constraintsBuilder.setValidator(new AvailableDatesValidator(availableDates));
+
+        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select Appointment Date")
+                .setCalendarConstraints(constraintsBuilder.build())
+                .build();
+
+        datePicker.addOnPositiveButtonClickListener(selection -> {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+            selectedDate = sdf.format(new Date(selection));
             tvDateSelect.setText(selectedDate);
-            
             updateTimeSlotsGrid();
-            
-        }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
-        
-        // Prevent booking in the past
-        dialog.getDatePicker().setMinDate(cal.getTimeInMillis());
-        dialog.show();
+        });
+
+        datePicker.show(getSupportFragmentManager(), "DATE_PICKER");
     }
 
     private void updateTimeSlotsGrid() {
@@ -240,5 +275,51 @@ public class BookAppointmentActivity extends AppCompatActivity {
     private void resetButton() {
         btnSubmitBooking.setEnabled(true);
         btnSubmitBooking.setText("CONFIRM BOOKING");
+    }
+
+    public static class AvailableDatesValidator implements CalendarConstraints.DateValidator {
+        private final HashSet<Long> availableDates;
+
+        public AvailableDatesValidator(Set<Long> availableDates) {
+            this.availableDates = new HashSet<>(availableDates);
+        }
+
+        protected AvailableDatesValidator(Parcel in) {
+            int size = in.readInt();
+            availableDates = new HashSet<>();
+            for (int i = 0; i < size; i++) {
+                availableDates.add(in.readLong());
+            }
+        }
+
+        public static final Creator<AvailableDatesValidator> CREATOR = new Creator<AvailableDatesValidator>() {
+            @Override
+            public AvailableDatesValidator createFromParcel(Parcel in) {
+                return new AvailableDatesValidator(in);
+            }
+
+            @Override
+            public AvailableDatesValidator[] newArray(int size) {
+                return new AvailableDatesValidator[size];
+            }
+        };
+
+        @Override
+        public boolean isValid(long date) {
+            return availableDates.contains(date);
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(availableDates.size());
+            for (Long d : availableDates) {
+                dest.writeLong(d);
+            }
+        }
     }
 }

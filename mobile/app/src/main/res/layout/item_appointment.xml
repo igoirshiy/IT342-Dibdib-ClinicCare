@@ -6,54 +6,105 @@
     android:layout_marginHorizontal="16dp"
     android:layout_marginVertical="8dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="4dp">
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="@color/cardBackground"
+    app:strokeColor="@color/borderColor"
+    app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/tvDoctorName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Dr. Name"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#333333" />
-
-        <TextView
-            android:id="@+id/tvConsultationType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Consultation Type"
-            android:textSize="14sp"
-            android:textColor="#666666"
-            android:layout_marginTop="4dp" />
-
+        <!-- Left Container for Text Details -->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="12dp">
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvDateTime"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:id="@+id/tvDoctorName"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Date - Time"
-                android:textSize="14sp"
-                android:textColor="#000000" />
-
-            <TextView
-                android:id="@+id/tvStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Waiting"
+                android:text="Dr. Name"
+                android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="#2A5C82" />
+                android:textColor="@color/primaryPink" />
+
+            <TextView
+                android:id="@+id/tvConsultationType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Consultation Type"
+                android:textSize="14sp"
+                android:textColor="@color/lightText"
+                android:layout_marginTop="4dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvDateTime"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Date • Time"
+                    android:textSize="13sp"
+                    android:textColor="@color/darkText" />
+
+                <TextView
+                    android:id="@+id/tvStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Waiting"
+                    android:textStyle="bold"
+                    android:textColor="@color/primaryPurple"
+                    android:textSize="13sp" />
+            </LinearLayout>
         </LinearLayout>
+
+        <!-- Right Container for Queue Number Badge -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/layoutQueue"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="16dp"
+            app:cardCornerRadius="8dp"
+            app:cardBackgroundColor="@color/lightBackground"
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="QUEUE"
+                    android:textSize="10sp"
+                    android:textColor="@color/lightText"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvQueueNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="A1"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primaryPink" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

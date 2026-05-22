@@ -535,11 +535,12 @@
 }
 
 .premium-form {
-  width: 100%;
-  max-width: 540px;
+  width: 800px;
+  max-width: 100%;
   background: white !important;
   border-radius: 24px;
   overflow: hidden;
+  box-sizing: border-box;
   box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.3);
   animation: modalScale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -594,7 +595,8 @@
 }
 
 .form-content {
-  padding: 32px;
+  padding: 24px;
+  box-sizing: border-box;
 }
 
 .form-group label {
@@ -617,6 +619,7 @@
   font-weight: 600;
   color: #1e293b;
   transition: all 0.2s;
+  box-sizing: border-box;
 }
 
 .form-group input:focus {
@@ -626,10 +629,14 @@
   box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
 }
 
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+.premium-form .form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.premium-form .form-row .form-group {
+  width: 100%;
 }
 
 .time-blocks-list {
@@ -638,6 +645,7 @@
   border-radius: 16px;
   padding: 20px;
   border: 1px solid #f1f5f9;
+  box-sizing: border-box;
 }
 
 .list-header {
@@ -674,11 +682,20 @@
 }
 
 .time-block-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 70px 30px;
+  display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 10px;
   align-items: center;
+}
+.time-block-row input[type="time"] {
+  flex: 1;
+  min-width: 100px;
+  box-sizing: border-box;
+}
+.time-block-row input[type="number"] {
+  width: 70px;
+  box-sizing: border-box;
 }
 
 .time-block-row input {

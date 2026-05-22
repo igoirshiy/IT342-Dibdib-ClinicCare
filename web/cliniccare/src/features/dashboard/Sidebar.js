@@ -27,7 +27,7 @@ const Sidebar = ({ activeKey, onNavigate, onLogout, userRole }) => {
 
     const filteredNavItems = navItems.filter(item => {
         if (userRole === 'STAFF') {
-            return item.key === 'staff' || item.key === 'dashboard' || item.key === 'profile';
+            return item.key === 'staff' || item.key === 'dashboard';
         }
         return item.key !== 'staff';
     });

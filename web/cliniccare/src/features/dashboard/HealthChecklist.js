@@ -3,15 +3,10 @@ import { Plus, Trash2, Edit2, X, Activity, Droplets, Footprints, Pill, StretchHo
 import "./HealthChecklist.css";
 
 const HealthChecklist = ({ user }) => {
-  const [tasks, setTasks] = useState([
-    { id: 1, text: "Drink 8 glasses of water", completed: false, icon: "water" },
-    { id: 2, text: "Walk for 20 minutes", completed: false, icon: "walk" },
-    { id: 3, text: "Take vitamins", completed: false, icon: "vitamins" },
-    { id: 4, text: "Stretch for 10 minutes", completed: false, icon: "stretch" },
-    { id: 5, text: "Get 7-8 hours of sleep", completed: false, icon: "sleep" },
-  ]);
+  const [tasks, setTasks] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [newTaskText, setNewTaskText] = useState("");
+  const [hasLoaded, setHasLoaded] = useState(false);
 
   const userSuffix = user?.email ? `_${user.email}` : "";
   const TASKS_KEY = `healthTasks${userSuffix}`;
@@ -19,6 +14,8 @@ const HealthChecklist = ({ user }) => {
 
   // Load from localStorage on mount and check for daily reset
   useEffect(() => {
+    if (!user?.email) return;
+
     const savedTasks = localStorage.getItem(TASKS_KEY);
     const lastResetDate = localStorage.getItem(RESET_KEY);
     const today = new Date().toDateString();
@@ -37,15 +34,23 @@ const HealthChecklist = ({ user }) => {
     } else {
       // First time initialization for this user
       localStorage.setItem(RESET_KEY, today);
+      setTasks([
+        { id: 1, text: "Drink 8 glasses of water", completed: false, icon: "water" },
+        { id: 2, text: "Walk for 20 minutes", completed: false, icon: "walk" },
+        { id: 3, text: "Take vitamins", completed: false, icon: "vitamins" },
+        { id: 4, text: "Stretch for 10 minutes", completed: false, icon: "stretch" },
+        { id: 5, text: "Get 7-8 hours of sleep", completed: false, icon: "sleep" },
+      ]);
     }
-  }, [TASKS_KEY, RESET_KEY]);
+    setHasLoaded(true);
+  }, [TASKS_KEY, RESET_KEY, user?.email]);
 
   // Save to localStorage whenever tasks change
   useEffect(() => {
-    if (user?.email) {
+    if (user?.email && hasLoaded) {
       localStorage.setItem(TASKS_KEY, JSON.stringify(tasks));
     }
-  }, [tasks, TASKS_KEY]);
+  }, [tasks, TASKS_KEY, hasLoaded, user?.email]);
 
   const toggleTask = (id) => {
     setTasks(tasks.map(task => 

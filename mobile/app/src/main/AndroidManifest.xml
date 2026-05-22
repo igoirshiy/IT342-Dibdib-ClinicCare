@@ -33,6 +33,20 @@
             android:name=".BookAppointmentActivity"
             android:exported="false"
             android:parentActivityName=".DashboardActivity" />
+
+        <activity
+            android:name=".MyAppointmentsActivity"
+            android:exported="false"
+            android:parentActivityName=".DashboardActivity" />
+
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false"
+            android:parentActivityName=".DashboardActivity" />
+
+        <activity
+            android:name=".ui.auth.RegisterActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

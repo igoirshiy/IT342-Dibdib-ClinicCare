@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/lightBackground"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
@@ -30,14 +31,14 @@
                 android:text="1. Consultation Type"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="#2A5C82"
+                android:textColor="@color/primaryPink"
                 android:layout_marginBottom="8dp"/>
 
             <Spinner
                 android:id="@+id/spinnerType"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@android:drawable/btn_dropdown"
+                android:background="@drawable/bg_rounded_input"
                 android:layout_marginBottom="16dp"/>
 
             <TextView
@@ -46,14 +47,14 @@
                 android:text="2. Select Doctor"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="#2A5C82"
+                android:textColor="@color/primaryPink"
                 android:layout_marginBottom="8dp"/>
 
             <Spinner
                 android:id="@+id/spinnerDoctors"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@android:drawable/btn_dropdown"
+                android:background="@drawable/bg_rounded_input"
                 android:layout_marginBottom="16dp"/>
 
             <TextView
@@ -62,7 +63,7 @@
                 android:text="3. Appointment Date"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="#2A5C82"
+                android:textColor="@color/primaryPink"
                 android:layout_marginBottom="8dp"/>
 
             <TextView
@@ -73,8 +74,8 @@
                 android:gravity="center_vertical"
                 android:paddingStart="16dp"
                 android:textSize="16sp"
-                android:textColor="#333333"
-                android:background="@drawable/date_picker_bg"
+                android:textColor="@color/darkText"
+                android:background="@drawable/bg_rounded_input"
                 android:layout_marginBottom="16dp"/>
 
             <TextView
@@ -83,7 +84,7 @@
                 android:text="4. Available Time Slots"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="#2A5C82"
+                android:textColor="@color/primaryPink"
                 android:layout_marginBottom="8dp"/>
                 
             <TextView
@@ -93,8 +94,8 @@
                 android:text="Please select a doctor and date."
                 android:gravity="center"
                 android:padding="16dp"
-                android:textColor="#666666"
-                android:background="#F5F5F5"
+                android:textColor="@color/lightText"
+                android:background="@drawable/bg_glass_card"
                 android:layout_marginBottom="16dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -110,14 +111,13 @@
                 android:text="5. Reason for Visit"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="#2A5C82"
+                android:textColor="@color/primaryPink"
                 android:layout_marginBottom="8dp"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="32dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:layout_marginBottom="32dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etReason"
@@ -125,6 +125,7 @@
                     android:layout_height="120dp"
                     android:gravity="top|start"
                     android:hint="Describe your symptoms or reason for visit..."
+                    android:textColor="@color/darkText"
                     android:inputType="textMultiLine" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -133,8 +134,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:text="CONFIRM BOOKING"
-                android:textSize="18sp"
-                app:cornerRadius="8dp" />
+                android:textSize="18sp" />
 
         </LinearLayout>
     </ScrollView>

@@ -39,13 +39,23 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
         holder.tvDateTime.setText(appointment.getAppointmentDate() + " • " + appointment.getTimeSlot());
         holder.tvStatus.setText(appointment.getStatus());
 
-        // Simple color coding for status
-        if ("Completed".equalsIgnoreCase(appointment.getStatus())) {
-            holder.tvStatus.setTextColor(android.graphics.Color.parseColor("#4CAF50")); // Green
-        } else if ("Cancelled".equalsIgnoreCase(appointment.getStatus())) {
-            holder.tvStatus.setTextColor(android.graphics.Color.parseColor("#F44336")); // Red
+        // Queue Number Binding
+        if (appointment.getQueueNumber() != null && !appointment.getQueueNumber().trim().isEmpty()) {
+            holder.tvQueueNumber.setText(appointment.getQueueNumber().trim());
+            holder.layoutQueue.setVisibility(View.VISIBLE);
         } else {
-            holder.tvStatus.setTextColor(android.graphics.Color.parseColor("#2A5C82")); // Blue
+            holder.layoutQueue.setVisibility(View.GONE);
+        }
+
+        // Color coding for status
+        if ("Completed".equalsIgnoreCase(appointment.getStatus())) {
+            holder.tvStatus.setTextColor(android.graphics.Color.parseColor("#10B981")); // Emerald Green
+        } else if ("Cancelled".equalsIgnoreCase(appointment.getStatus()) || "Rejected".equalsIgnoreCase(appointment.getStatus())) {
+            holder.tvStatus.setTextColor(android.graphics.Color.parseColor("#EF4444")); // Red
+        } else if ("Serving".equalsIgnoreCase(appointment.getStatus())) {
+            holder.tvStatus.setTextColor(android.graphics.Color.parseColor("#F59E0B")); // Amber
+        } else {
+            holder.tvStatus.setTextColor(android.graphics.Color.parseColor("#D946EF")); // Primary Purple
         }
     }
 
@@ -59,6 +69,8 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
         TextView tvConsultationType;
         TextView tvDateTime;
         TextView tvStatus;
+        TextView tvQueueNumber;
+        View layoutQueue;
 
         public AppointmentViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -66,6 +78,8 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
             tvConsultationType = itemView.findViewById(R.id.tvConsultationType);
             tvDateTime = itemView.findViewById(R.id.tvDateTime);
             tvStatus = itemView.findViewById(R.id.tvStatus);
+            tvQueueNumber = itemView.findViewById(R.id.tvQueueNumber);
+            layoutQueue = itemView.findViewById(R.id.layoutQueue);
         }
     }
 }
