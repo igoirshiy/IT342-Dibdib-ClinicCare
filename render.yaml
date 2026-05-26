@@ -7,7 +7,7 @@ services:
     plan: free
     dockerContext: ./ClinicCare
     dockerfilePath: ./ClinicCare/Dockerfile
-    healthCheckPath: /api/appointments
+    healthCheckPath: /api/doctors
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
