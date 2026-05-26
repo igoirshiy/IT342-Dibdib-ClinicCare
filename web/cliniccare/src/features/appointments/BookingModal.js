@@ -28,7 +28,7 @@ const BookingModal = ({ isOpen, onClose, user, onSuccess }) => {
     const fetchUserAppointments = async () => {
         if (!user?.email) return;
         try {
-            const response = await fetch(`http://127.0.0.1:8080/api/appointments/patient/${user.email}`);
+            const response = await fetch(`${process.env.REACT_APP_API_URL || (process.env.REACT_APP_API_URL || "http://127.0.0.1:8080") + ""}/api/appointments/patient/${user.email}`);
             if (response.ok) {
                 const data = await response.json();
                 setUserAppointments(data);
@@ -42,7 +42,7 @@ const BookingModal = ({ isOpen, onClose, user, onSuccess }) => {
         setIsLoadingSlots(true);
         try {
             // Add timestamp to bus cache
-            const response = await fetch(`http://127.0.0.1:8080/api/slots?t=${Date.now()}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL || (process.env.REACT_APP_API_URL || "http://127.0.0.1:8080") + ""}/api/slots?t=${Date.now()}`, {
                 headers: {
                     'Cache-Control': 'no-cache',
                     'Pragma': 'no-cache'
@@ -124,7 +124,7 @@ const BookingModal = ({ isOpen, onClose, user, onSuccess }) => {
             }
 
             console.log("Sending request to backend...");
-            const response = await fetch('http://127.0.0.1:8080/api/appointments/book', {
+            const response = await fetch((process.env.REACT_APP_API_URL || (process.env.REACT_APP_API_URL || "http://127.0.0.1:8080") + "") + '/api/appointments/book', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

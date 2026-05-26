@@ -31,7 +31,7 @@ const StaffAppointmentList = () => {
   const fetchAppointments = async () => {
     try {
       const endpoint = viewAll ? "all" : "today";
-      const response = await fetch(`http://127.0.0.1:8080/api/appointments/${endpoint}`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL || (process.env.REACT_APP_API_URL || "http://127.0.0.1:8080") + ""}/api/appointments/${endpoint}`);
       if (response.ok) {
         const data = await response.json();
         setAppointments(data);
@@ -45,7 +45,7 @@ const StaffAppointmentList = () => {
 
   const fetchDoctors = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8080/api/doctors");
+      const response = await fetch((process.env.REACT_APP_API_URL || "http://127.0.0.1:8080") + "/api/doctors");
       if (response.ok) {
         const data = await response.json();
         setDoctors(data);
@@ -60,7 +60,7 @@ const StaffAppointmentList = () => {
       prev.map((a) => (a.id === id ? { ...a, status: newStatus } : a))
     );
 
-    fetch(`http://127.0.0.1:8080/api/appointments/${id}/status`, {
+    fetch(`${process.env.REACT_APP_API_URL || (process.env.REACT_APP_API_URL || "http://127.0.0.1:8080") + ""}/api/appointments/${id}/status`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newStatus),

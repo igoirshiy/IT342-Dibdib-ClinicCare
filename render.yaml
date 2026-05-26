@@ -1,0 +1,29 @@
+services:
+  # Spring Boot Backend Web Service
+  - type: web
+    name: cliniccare-backend
+    env: docker
+    region: singapore
+    plan: free
+    dockerContext: ./ClinicCare
+    dockerfilePath: ./ClinicCare/Dockerfile
+    healthCheckPath: /api/appointments
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+
+  # React Frontend Static Site
+  - type: web
+    name: cliniccare-frontend
+    env: static
+    rootDir: web/cliniccare
+    region: singapore
+    plan: free
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./build
+    envVars:
+      - key: REACT_APP_API_URL
+        fromService:
+          type: web
+          name: cliniccare-backend
+          envVarKey: RENDER_EXTERNAL_URL

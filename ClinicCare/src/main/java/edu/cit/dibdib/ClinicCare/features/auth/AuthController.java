@@ -91,4 +91,55 @@ public class AuthController {
         System.out.println("Login failed: User not found with email " + loginRequest.getEmail());
         return ResponseEntity.status(401).body("Error: User not found!");
     }
+
+    @PostMapping("/google-login")
+    @Transactional
+    public ResponseEntity<?> googleLogin(@RequestBody edu.cit.dibdib.cliniccare.features.auth.GoogleLoginRequest request) {
+        try {
+            com.google.api.client.http.HttpTransport transport = new com.google.api.client.http.javanet.NetHttpTransport();
+            com.google.api.client.json.JsonFactory jsonFactory = com.google.api.client.json.gson.GsonFactory.getDefaultInstance();
+            
+            // Replace with the Web Client ID once generated
+            String webClientId = "106277203446-9792k4n8vl2qdkkjdoone90irhei09gq.apps.googleusercontent.com"; 
+            
+            com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier verifier = new com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier.Builder(transport, jsonFactory)
+                .setAudience(java.util.Collections.singletonList(webClientId))
+                .build();
+
+            com.google.api.client.googleapis.auth.oauth2.GoogleIdToken idToken = verifier.verify(request.getIdToken());
+            if (idToken != null) {
+                com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload payload = idToken.getPayload();
+                String email = payload.getEmail();
+                String name = (String) payload.get("name");
+                
+                var patientOpt = userRepository.findByEmail(email);
+                if (patientOpt.isPresent()) {
+                    User patient = patientOpt.get();
+                    if (patient.getRole() == null) patient.setRole("PATIENT");
+                    return ResponseEntity.ok(patient);
+                }
+                
+                var staffOpt = staffRepository.findByEmail(email);
+                if (staffOpt.isPresent()) {
+                    return ResponseEntity.ok(staffOpt.get());
+                }
+                
+                // Auto-register new patient
+                edu.cit.dibdib.ClinicCare.features.users.BaseUser newUser = userFactory.createUser("PATIENT");
+                User user = (User) newUser;
+                user.setEmail(email);
+                user.setFullName(name);
+                user.setPassword(""); // Generate random or leave blank
+                user.setRole("PATIENT");
+                userRepository.save(user);
+                
+                return ResponseEntity.ok(user);
+            } else {
+                return ResponseEntity.status(401).body("Invalid ID token.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Error verifying token: " + e.getMessage());
+        }
+    }
 }

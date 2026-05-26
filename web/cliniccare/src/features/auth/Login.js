@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { GoogleLogin } from '@react-oauth/google';
 import './Login.css';
 
 const Login = ({ onSwitchToRegister, onLogin }) => {
@@ -33,7 +34,7 @@ const Login = ({ onSwitchToRegister, onLogin }) => {
         const validationErrors = validate();
         if (Object.keys(validationErrors).length === 0) {
             try {
-                const response = await fetch('http://127.0.0.1:8080/api/auth/login', {
+                const response = await fetch((process.env.REACT_APP_API_URL || (process.env.REACT_APP_API_URL || "http://127.0.0.1:8080") + "") + '/api/auth/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -107,6 +108,34 @@ const Login = ({ onSwitchToRegister, onLogin }) => {
                         </button>
                     </div>
                 </form>
+                <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
+                    <GoogleLogin
+                        onSuccess={async (credentialResponse) => {
+                            try {
+                                const response = await fetch((process.env.REACT_APP_API_URL || (process.env.REACT_APP_API_URL || "http://127.0.0.1:8080") + "") + '/api/auth/google-login', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        idToken: credentialResponse.credential
+                                    }),
+                                });
+                                if (response.ok) {
+                                    const userData = await response.json();
+                                    if (onLogin) onLogin(userData);
+                                } else {
+                                    alert('Google Login Failed on server');
+                                }
+                            } catch (error) {
+                                console.error('Error during Google login:', error);
+                            }
+                        }}
+                        onError={() => {
+                            console.log('Google Login Failed');
+                        }}
+                    />
+                </div>
                 <div className="login-footer">
                     <p>
                         Don't have an account? <a href="#register" onClick={(e) => { e.preventDefault(); onSwitchToRegister(); }}>Register</a>

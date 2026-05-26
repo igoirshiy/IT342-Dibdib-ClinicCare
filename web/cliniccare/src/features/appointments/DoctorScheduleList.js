@@ -17,8 +17,8 @@ const DoctorScheduleList = () => {
   const fetchData = async () => {
     try {
       const [docRes, slotRes] = await Promise.all([
-        fetch("http://127.0.0.1:8080/api/doctors"),
-        fetch("http://127.0.0.1:8080/api/slots")
+        fetch((process.env.REACT_APP_API_URL || "http://127.0.0.1:8080") + "/api/doctors"),
+        fetch((process.env.REACT_APP_API_URL || "http://127.0.0.1:8080") + "/api/slots")
       ]);
 
       if (docRes.ok && slotRes.ok) {

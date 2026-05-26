@@ -16,7 +16,7 @@ const StaffDashboardCards = ({ refreshTrigger }) => {
 
     const fetchStats = async () => {
         try {
-            const response = await fetch('http://127.0.0.1:8080/api/appointments/stats');
+            const response = await fetch((process.env.REACT_APP_API_URL || (process.env.REACT_APP_API_URL || "http://127.0.0.1:8080") + "") + '/api/appointments/stats');
             if (response.ok) {
                 const data = await response.json();
                 setStats(data);

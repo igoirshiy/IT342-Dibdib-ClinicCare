@@ -15,6 +15,9 @@ public interface ApiService {
     @POST("/api/auth/register")
     Call<UserResponse> registerUser(@Body RegisterRequest request);
 
+    @POST("/api/auth/google-login")
+    Call<UserResponse> googleLogin(@Body edu.cit.dibdib.cliniccare.models.GoogleLoginRequest request);
+
     @retrofit2.http.GET("/api/appointments/patient/{email}")
     Call<java.util.List<edu.cit.dibdib.cliniccare.models.Appointment>> getPatientAppointments(@retrofit2.http.Path("email") String email);
 

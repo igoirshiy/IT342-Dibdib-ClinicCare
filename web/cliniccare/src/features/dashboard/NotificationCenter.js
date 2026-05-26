@@ -12,7 +12,7 @@ const NotificationCenter = ({ isDropdown, onClose, user, onUnreadCount }) => {
 
         const fetchRealNotifications = async () => {
             try {
-                const response = await fetch(`http://127.0.0.1:8080/api/appointments/patient/${user.email}`);
+                const response = await fetch(`${process.env.REACT_APP_API_URL || (process.env.REACT_APP_API_URL || "http://127.0.0.1:8080") + ""}/api/appointments/patient/${user.email}`);
                 if (response.ok) {
                     const appointments = await response.json();
                     

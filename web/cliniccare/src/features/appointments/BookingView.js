@@ -22,7 +22,7 @@ const BookingView = ({ user, onBookingSuccess }) => {
     const fetchAllSlots = async () => {
         setIsLoadingSlots(true);
         try {
-            const response = await fetch(`http://127.0.0.1:8080/api/slots`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL || (process.env.REACT_APP_API_URL || "http://127.0.0.1:8080") + ""}/api/slots`, {
                 headers: {
                     'Cache-Control': 'no-cache',
                     'Pragma': 'no-cache'
@@ -47,7 +47,7 @@ const BookingView = ({ user, onBookingSuccess }) => {
     const fetchUserAppointments = async () => {
         if (!user?.email) return;
         try {
-            const response = await fetch(`http://127.0.0.1:8080/api/appointments/patient/${user.email}`);
+            const response = await fetch(`${process.env.REACT_APP_API_URL || (process.env.REACT_APP_API_URL || "http://127.0.0.1:8080") + ""}/api/appointments/patient/${user.email}`);
             if (response.ok) {
                 const data = await response.json();
                 setUserAppointments(data);
@@ -100,7 +100,7 @@ const BookingView = ({ user, onBookingSuccess }) => {
                 selectedSlotId: formData.selectedSlotId
             };
 
-            const response = await fetch('http://127.0.0.1:8080/api/appointments/book', {
+            const response = await fetch((process.env.REACT_APP_API_URL || (process.env.REACT_APP_API_URL || "http://127.0.0.1:8080") + "") + '/api/appointments/book', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),

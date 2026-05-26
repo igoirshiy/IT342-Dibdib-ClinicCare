@@ -46,7 +46,7 @@ const SlotManager = () => {
 
   const fetchSlots = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8080/api/slots");
+      const response = await fetch((process.env.REACT_APP_API_URL || "http://127.0.0.1:8080") + "/api/slots");
       if (response.ok) {
         const data = await response.json();
         setSlots(data);
@@ -72,7 +72,7 @@ const SlotManager = () => {
 
     try {
       const updatedSlot = { ...slotToUpdate, startTime: editStart, endTime: editEnd };
-      const response = await fetch(`http://127.0.0.1:8080/api/slots/${id}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || (process.env.REACT_APP_API_URL || "http://127.0.0.1:8080") + ""}/api/slots/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedSlot),
@@ -95,7 +95,7 @@ const SlotManager = () => {
 
     try {
       const updatedSlot = { ...slotToUpdate, disabled: !slotToUpdate.disabled };
-      const response = await fetch(`http://127.0.0.1:8080/api/slots/${id}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || (process.env.REACT_APP_API_URL || "http://127.0.0.1:8080") + ""}/api/slots/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedSlot),
@@ -114,7 +114,7 @@ const SlotManager = () => {
     if (!window.confirm("Are you sure you want to delete this slot?")) return;
 
     try {
-      const response = await fetch(`http://127.0.0.1:8080/api/slots/${id}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || (process.env.REACT_APP_API_URL || "http://127.0.0.1:8080") + ""}/api/slots/${id}`, {
         method: "DELETE",
       });
 
@@ -176,7 +176,7 @@ const SlotManager = () => {
         });
       }
 
-      const response = await fetch("http://127.0.0.1:8080/api/slots/batch", {
+      const response = await fetch((process.env.REACT_APP_API_URL || "http://127.0.0.1:8080") + "/api/slots/batch", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(slotsToCreate),

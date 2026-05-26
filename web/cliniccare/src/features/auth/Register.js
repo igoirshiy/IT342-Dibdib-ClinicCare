@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { GoogleLogin } from '@react-oauth/google';
 import './Register.css';
 
 const Register = ({ onSwitchToLogin, onRegisterSuccess }) => {
@@ -42,7 +43,7 @@ const Register = ({ onSwitchToLogin, onRegisterSuccess }) => {
         const validationErrors = validate();
         if (Object.keys(validationErrors).length === 0) {
             try {
-                const response = await fetch('http://127.0.0.1:8080/api/auth/register', {
+                const response = await fetch((process.env.REACT_APP_API_URL || (process.env.REACT_APP_API_URL || "http://127.0.0.1:8080") + "") + '/api/auth/register', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -182,6 +183,40 @@ const Register = ({ onSwitchToLogin, onRegisterSuccess }) => {
                         </button>
                     </div>
                 </form>
+                <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
+                    <GoogleLogin
+                        text="signup_with"
+                        onSuccess={async (credentialResponse) => {
+                            try {
+                                const response = await fetch((process.env.REACT_APP_API_URL || (process.env.REACT_APP_API_URL || "http://127.0.0.1:8080") + "") + '/api/auth/google-login', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        idToken: credentialResponse.credential
+                                    }),
+                                });
+                                if (response.ok) {
+                                    const userData = await response.json();
+                                    if (onRegisterSuccess) {
+                                        onRegisterSuccess(userData);
+                                    } else if (onSwitchToLogin) {
+                                        // Some flow logic might expect to switch back, but here we can just pass the user data up if supported
+                                        onRegisterSuccess(userData);
+                                    }
+                                } else {
+                                    alert('Google Sign Up Failed on server');
+                                }
+                            } catch (error) {
+                                console.error('Error during Google sign up:', error);
+                            }
+                        }}
+                        onError={() => {
+                            console.log('Google Sign Up Failed');
+                        }}
+                    />
+                </div>
                 <div className="register-footer">
                     <p>
                         Already have an account? <a href="#login" onClick={(e) => { e.preventDefault(); onSwitchToLogin(); }}>Login</a>

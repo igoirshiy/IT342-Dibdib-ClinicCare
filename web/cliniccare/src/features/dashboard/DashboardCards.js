@@ -9,7 +9,7 @@ const DashboardCards = ({ onBookClick, onViewAppointmentsClick, user, refreshTri
     const fetchUserAppointments = async () => {
         if (!user?.email) return;
         try {
-            const response = await fetch(`http://127.0.0.1:8080/api/appointments/patient/${user.email}`);
+            const response = await fetch(`${process.env.REACT_APP_API_URL || (process.env.REACT_APP_API_URL || "http://127.0.0.1:8080") + ""}/api/appointments/patient/${user.email}`);
             if (response.ok) {
                 const data = await response.json();
                 const sorted = data.sort((a, b) => new Date(a.appointmentDate) - new Date(b.appointmentDate));
