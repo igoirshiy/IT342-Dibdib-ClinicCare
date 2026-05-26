@@ -17,7 +17,6 @@ services:
     name: cliniccare-frontend
     env: static
     rootDir: web/cliniccare
-    plan: free
     buildCommand: npm install && npm run build
     staticPublishPath: ./build
     envVars:
